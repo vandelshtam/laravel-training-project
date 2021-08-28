@@ -11,7 +11,7 @@
     <link id="myskin" rel="stylesheet" media="screen, print" href="/laravel-training-project/resources/css/skins/skin-master.css">
     <link rel="stylesheet" media="screen, print" href="/laravel-training-project/resources/css/fa-solid.css">
     <link rel="stylesheet" media="screen, print" href="/laravel-training-project/resources/css/fa-brands.css">
-    <link rel="stylesheet" media="screen, print" href="/laravel-training-project/resources/css/fa-regular.css">
+    <link rel="stylesheet" media="screen, print" href="////laravel-training-project/resources/css/fa-regular.css">
     
 </head>
     <body class="mod-bg-1 mod-nav-link">
