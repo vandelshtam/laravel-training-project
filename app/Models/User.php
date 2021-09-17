@@ -2,11 +2,16 @@
 
 namespace App\Models;
 
+use App\Models\Chat;
+use App\Models\Post;
+use App\Models\Message;
+use App\Models\Users_list;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Contracts\Auth\CanResetPassword;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
-use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -31,6 +36,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
+        'name'
     ];
 
     /**
@@ -41,4 +47,41 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function post()
+    {
+        return $this->belongsTo(Post::class);
+    }
+    public function infos()
+    {
+        return $this->hasMany(Info::class);
+    }
+    public function socials()
+    {
+        return $this->hasMany(Social::class);
+    }
+    public function comments()
+    {
+        return $this->morphMany(Comment::class, 'commentable');
+    }
+    public function chats()
+    {
+        return $this->hasMany(Chat::class);
+    }
+    
+    
+    public function userlists()
+    {
+        return $this->morphMany(Userlist::class, 'userlistable');
+    }
+    public function messages()
+    {
+        return $this->morphMany(Message::class, 'messageable');
+    }
+
+    public function userlist()
+    {
+        return $this->morphOne(Userlist::class, 'userlistable');
+    }
+    
 }
