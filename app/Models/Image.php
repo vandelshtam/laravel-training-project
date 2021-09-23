@@ -14,6 +14,8 @@ class Image extends Model
         'image',
         'post_id',
         'user_id',
+        'imageable_id',
+        'imageable_type',
     ];
 
     public function comments()

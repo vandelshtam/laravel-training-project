@@ -3,19 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Info;
-use App\Models\Post;
 use App\Models\User;
-use App\Models\Image;
-
 use App\Models\Social;
-use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
-use phpDocumentor\Reflection\DocBlock\Tag;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -41,13 +35,9 @@ class UsersController extends BaseController
     public function home(){
         $flash_message_success = session('flash_message_success');
         $flash_message_danger = session('flash_message_danger');
-        $users = DB::table('users')
-            ->join('infos', 'users.id', '=', 'infos.user_id')
-            ->join('socials', 'users.id', '=', 'socials.user_id')
-            ->paginate(5);
-
-           // dd($users);
-            return view('users', ['users' => $users, 'flash_message_success' => $flash_message_success, 'flash_message_danger' => $flash_message_danger]);
+        $users = User::paginate(5);
+        
+        return view('users', ['users' => $users, 'flash_message_success' => $flash_message_success, 'flash_message_danger' => $flash_message_danger]);
     }
 
 
@@ -59,13 +49,9 @@ class UsersController extends BaseController
             $this->request->session()->flash('flash_message_danger','Такого пользователя нет!!!');
             return redirect('/');
         }
-        $user = DB::table('users')
-            ->join('infos', 'users.id', '=', 'infos.user_id')
-            ->join('socials', 'users.id', '=', 'socials.user_id')
-            ->where('users.id', $id)
-            ->get()->toArray();
+        $user = User::find($id);
             if($user) {
-                return view('user_profile', ['user' => $user[0]]);
+                return view('user_profile', ['user' => $user]);
             }
             else{
                 $this->request->session()->flash('flash_message_danger','Такого пользователя нет!!!');
@@ -122,7 +108,8 @@ class UsersController extends BaseController
                 'password' => Hash::make($this->request->password)
             ]);
             
-            DB::table('infos')->insert([
+
+            $info = Info::create([
                 'occupation' => $this->request->occupation,
                 'location' => $this->request->location,
                 'position' => $this->request->position,
@@ -133,12 +120,19 @@ class UsersController extends BaseController
                 'infosable_id' =>$id
             ]);
             
-            DB::table('socials')->insert([
+            $social = new Social([
                 'telegram' => $this->request->telegram,
                 'instagram' => $this->request->instagram,
                 'vk' => $this->request->vk,
                 'user_id' => $id
             ]);
+            $social->save(); 
+            $user = User::find($id);
+             
+           $user = User::find($id);
+           $user->info_id = $info->id;
+           $user->social_id = $social->id;
+           $user->save();
 
             //сообщение об успешной регистрации нового пользователя
             $this->request->session()->flash('flash_message_success','Вы успешно добавили, нового пользователя!');
@@ -161,17 +155,13 @@ class UsersController extends BaseController
             return redirect('/');
         }
         
-        $user = DB::table('users')
-            ->join('infos', 'users.id', '=', 'infos.user_id')
-            ->join('socials', 'users.id', '=', 'socials.user_id')
-            ->where('users.id', $id)
-            ->get()->toArray();
+        $user = User::find($id);
 
         if(!$user){
             $this->request->session()->flash('flash_message_danger','Такого пользователя нет!!!');
             return redirect('/');
         }
-        return view('edit', ['user' => $user[0]]);
+        return view('edit', ['user' => $user]);
     }
 
 
@@ -197,14 +187,12 @@ class UsersController extends BaseController
                 'phone' => 'required|min:3|max:16'
             ]);
             
-//dd($this->request->name);
             //запись новых данных в БД
-            $afacted = DB::table('users')
-              ->where('id', $id)
+            
+            User::where('id', $id)
               ->update(['name' => $this->request->name]);
-//dd($afacted);
-            DB::table('infos')
-              ->where('user_id', $id)
+
+            Info::where('user_id', $id)
               ->update([
                   'occupation' => $this->request->occupation,
                   'phone' => $this->request->phone,
@@ -212,7 +200,7 @@ class UsersController extends BaseController
                 ]);
 
         $this->request->session()->flash('flash_message_success','Вы успешно изменили информацию!');
-        return redirect('/');
+        return redirect('/profile/'.$id.'');
     }
 
 
@@ -231,10 +219,7 @@ class UsersController extends BaseController
             return redirect('/');
         }
 
-        $user = DB::table('users')
-            ->join('infos', 'users.id', '=', 'infos.user_id')
-            ->where('users.id', $id)
-            ->get()->toArray();
+        $user = User::find($id);
 
             $statuses = [
                 0 => 'Онлайн',
@@ -242,7 +227,7 @@ class UsersController extends BaseController
                 2 => 'Отошел'
             ];
 
-        return view('status', ['user' => $user[0], 'statuses' => $statuses]);
+        return view('status', ['user' => $user, 'statuses' => $statuses]);
     }
 
 
@@ -257,8 +242,7 @@ class UsersController extends BaseController
         ];
         $status_user = $statuses[$this->request->status];
 
-        DB::table('infos')
-              ->where('id', $id)
+        Info::where('id', $id)
               ->update([
                   'status' => $status_user
                 ]);
@@ -283,12 +267,8 @@ class UsersController extends BaseController
             return redirect('/');
         }
 
-        $user = DB::table('users')
-            ->join('infos', 'users.id', '=', 'infos.user_id')
-            ->where('users.id', $id)
-            ->get()->toArray();
-            //dd($user[0]->id);
-        return view('media', ['user' => $user[0]]);
+        $user = User::find($id);
+        return view('media', ['user' => $user]);
 
     }
 
@@ -307,15 +287,18 @@ class UsersController extends BaseController
             $this->request->session()->flash('flash_message_danger','You do not have permission to edit user profile!');
             return redirect('/');
         }
+        //удаление теекущего аватара
+        $imageName = Info::find($id)->avatar;
+        Storage::delete($imageName); 
 
-            DB::table('infos')
-              ->where('id', $id)
+        //запись нового аватара
+            Info::where('id', $id)
               ->update([
                 'avatar' => $this->request->file('avatar')->store('uploads') 
                 ]);
 
         $this->request->session()->flash('flash_message_success','Вы успешно заменили аватар!');
-        return redirect('/');
+        return redirect('/profile/'.$id.'');
     }
 
 
@@ -334,19 +317,15 @@ class UsersController extends BaseController
         }
 
         //удаление аватара
-        $imageName = DB::table('infos')
-        ->where('user_id', $id)
-        ->select('*')
-        ->first()
-        ->avatar;
-        
+        $imageName = Info::find($id)->avatar;
         Storage::delete($imageName); 
         
+        
         //удаление данных пользователя из таблиц БД
-        DB::table('users')->where('id', $id)->delete();
-        DB::table('infos')->where('user_id', $id)->delete();
-        DB::table('socials')->where('user_id', $id)->delete();
-
+        User::where('id', $id)->delete();
+        Info::where('user_id', $id)->delete();
+        Social::where('user_id', $id)->delete();
+        
         //удаление сессий авторизации
         if(auth()->user()->id == $id){
             $this->request->session()->invalidate();
@@ -366,10 +345,7 @@ class UsersController extends BaseController
         
         $key = trim($this->request->get('filter_contacts'));
 
-        $users = DB::table('users')->select()
-            ->join('infos', 'users.id', '=', 'infos.user_id')
-            ->join('socials', 'users.id', '=', 'socials.user_id')
-            ->where('name', 'like', "%{$key}%")
+        $users = User::where('name', 'like', "%{$key}%")
             ->orWhere('email', 'like', "%{$key}%")
             ->paginate(3);
 
@@ -396,17 +372,14 @@ class UsersController extends BaseController
             return redirect('/');
         }
 
-        $user = DB::table('users')
-            ->join('infos', 'users.id', '=', 'infos.user_id')
-            ->where('users.id', $id)
-            ->get()->toArray();
+        $user = User::find($id);
 
             $statuses_admin = [
                 0 => 'Пользователь',
                 1 => 'Админ'
             ];
 
-        return view('statusAdmin', ['user' => $user[0], 'statuses_admin' => $statuses_admin]);
+        return view('statusAdmin', ['user' => $user, 'statuses_admin' => $statuses_admin]);
     }
 
 
@@ -419,8 +392,7 @@ class UsersController extends BaseController
             'Админ' => 1
         ];
         $status_admin = $statuses_admin[$this->request->admin_status];
-        DB::table('users')
-              ->where('id', $id)
+        User::where('id', $id)
               ->update([
                   'admin' => $status_admin
                 ]);

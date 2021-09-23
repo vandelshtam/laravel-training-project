@@ -11,19 +11,19 @@
 @endsection
 
 @section('style')
-    <link id="vendorsbundle" rel="stylesheet" media="screen, print" href="css/vendors.bundle.css">
-    <link id="appbundle" rel="stylesheet" media="screen, print" href="css/app.bundle.css">
-    <link id="myskin" rel="stylesheet" media="screen, print" href="css/skins/skin-master.css">
-    <link rel="stylesheet" media="screen, print" href="css/fa-solid.css">
-    <link rel="stylesheet" media="screen, print" href="css/fa-brands.css">
-    <link rel="stylesheet" media="screen, print" href="css/fa-regular.css">   
+    <link id="vendorsbundle" rel="stylesheet" media="screen, print" href="{{ asset('css/vendors.bundle.css') }}">
+    <link id="appbundle" rel="stylesheet" media="screen, print" href="{{ asset('css/app.bundle.css') }}">
+    <link id="myskin" rel="stylesheet" media="screen, print" href="{{ asset('css/skins/skin-master.css') }}">
+    <link rel="stylesheet" media="screen, print" href="{{ asset('css/fa-solid.css') }}">
+    <link rel="stylesheet" media="screen, print" href="{{ asset('css/fa-brands.css') }}">
+    <link rel="stylesheet" media="screen, print" href="{{ asset('css/fa-regular.css') }}">   
 @endsection
 
 
 
 @section('navchat')
 <nav class="navbar navbar-expand-lg navbar-dark bg-info bg-info-gradient">
-    <a class="navbar-brand d-flex align-items-center fw-500" href="users.html"><img alt="logo" class="d-inline-block align-top mr-2" src="">Страница постов</a> <button aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarColor02" data-toggle="collapse" type="button"><span class="navbar-toggler-icon"></span></button>
+    <a class="navbar-brand d-flex align-items-center fw-500" href="users.html"><img alt="logo" class="d-inline-block align-top mr-2" src="{{ asset('img/logo.png') }}">Страница постов</a> <button aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarColor02" data-toggle="collapse" type="button"><span class="navbar-toggler-icon"></span></button>
     <div class="collapse navbar-collapse" id="navbarColor02">
         <ul class="navbar-nav md-3">
             <li class="nav-item active">
@@ -105,7 +105,7 @@
      
     <!--вывод информации поста -->
     <div class="row ">
-    <form action="/editPost/{{ $post->id }}" method="POST" enctype="multipart/form-data" class="col-lg-12 col-xl-12 m-auto">
+    <form action="/changeAvatar/{{ $post->id }}" method="POST" enctype="multipart/form-data" class="col-lg-12 col-xl-12 m-auto">
         {{ csrf_field() }}
       <div class="col-lg-12 col-xl-12 m-auto">
             <!-- пост -->
@@ -114,6 +114,9 @@
                     <div class="col-12">        
                         <div class="d-flex flex-column align-items-center justify-content-center p-4">    
                                 @if ( auth()->user()->admin || auth()->user()->id == $user->id)
+                                <a class="dropdown-item" onclick="return confirm('are your sure?')" href="/post/{{ $post->id }}">
+                                    <i class="fa fa-window-close btn btn-info"></i>
+                                 Вернуться к посту</a>        
                                 <a class="dropdown-item" onclick="return confirm('are your sure?')" href="/deletePost/{{ $post->id }}">
                                     <i class="fa fa-window-close btn btn-info"></i>
                                 Удалить пост</a>    
@@ -121,7 +124,7 @@
 
                             <!-- аватар поста -->    
                             <h2 align="center">Аватар поста</h2>
-                            <img src="{{ $post->avatar_post }}" class="rounded-circle shadow-2 img-thumbnail" alt="" style="width: 80%">
+                            <img src="{{ asset($post->avatar_post) }}" class="rounded-circle shadow-2 img-thumbnail" alt="" style="width: 80%">
                             <div class="panel-container col-lg-12 col-xl-12 m-auto" >
                                 <div class="panel-hdr">
                                     <h2>Текущий аватар</h2>
@@ -131,14 +134,14 @@
                                         <label class="form-label" for="example-fileinput">Выберите аватар</label>
                                         <input type="file" id="example-fileinput" class="form-control-file" name="avatar_post">
                                     </div>    
-                                    <div class="col-md-12 mt-3 d-flex flex-row-reverse">
+                                    <div class="col-md-12 mt-3 d-flex flex-row-reverse">   
                                         <button class="btn btn-warning" type="submit" name="submit">Загрузить аватар поста</button>
                                     </div>
                                 </div>
                             </div>
                             <br>
                             <hr> 
-
+                        </form>
                             <!-- фотографии поста -->
                             <div class="container">
                                 <h2 align="center">My galery</h2>
@@ -146,11 +149,10 @@
                                     @foreach ($post->images as $image)
                                         <div class="col-md-3 galery-item">
                                             <div>
-                                                <img src="{{ $image->image }}" alt="" class="img-fluid img-thumbnail">
+                                                <img src="{{ asset($image->image) }}" alt="" class="img-fluid img-thumbnail">
                                             </div>
                                         <input type="file" id="example-fileinput" class="form-control-file" name="delete_image" hidden>    
-                                        <a href="/delete_image/{{ $image->id }}/{{ $post->id }}" onclick="return confirm('are your sure?')" class="btn btn-danger my-button">Delete</a>
-                                        <button class="btn btn-warning" type="submit" name="submit" onclick="return confirm('are your sure?')">Delete image</button> 
+                                        <a href="/delete_image/{{ $image->id }}/{{ $post->id }}" onclick="return confirm('are your sure?')" class="btn btn-danger my-button">Delete image</a>
                                         </div>
                                     @endforeach   
                                 </div>
@@ -159,17 +161,22 @@
                                 <div class="panel-hdr">
                                     <h2>Текущие фотографии</h2>
                                 </div>
-                                <div class="panel-content" >   
+                                <div class="panel-content" >  
+                                    <form action="/downloadImage/{{ $post->id }}/{{ auth()->user()->id }}" method="POST" enctype="multipart/form-data" class="col-lg-12 col-xl-12 m-auto"> 
+                                        {{ csrf_field() }}  
                                     <div class="form-group">
                                         <label class="form-label" for="example-fileinput">Выберите фотографии</label>
                                         <input type="file" id="example-fileinput" class="form-control-file" name="image">
                                     </div>
                                     <div class="col-md-12 mt-3 d-flex flex-row-reverse">
-                                        <button class="btn btn-warning" type="submit" name="submit">Загрузить фотографии поста</button>
+                                        <button class="btn btn-warning" type="submit" name="submit_image">Загрузить фотографии поста</button>
                                     </div>
+                                    </form>
                                 </div>
                             </div> 
 
+                            <form action="/editInsertPost/{{ $post->id }}" method="POST" enctype="multipart/form-data" class="col-lg-12 col-xl-12 m-auto">
+                                {{ csrf_field() }}
                             <!-- Название поста -->
                             <h5 class="col-md-12 text-center mt-3">   
                                 <div class="form-group ">
@@ -189,20 +196,21 @@
                                 <label class="form-label" for="simpleinput">Введите текст поста</label>
                                 <input type="text" id="simpleinput" class="form-control" name="text" value="{{ $post->text}}" style="height: 100px">
                             </div>       
-                            </h5>   
+                            </h5> 
+                            </h5>
                         </div>
                     </div>    
                 </div>
             </div>
        </div>
        <div class="col-md-12 mt-3 d-flex flex-row-reverse">
-        <button class="btn btn-info" type="submit" onclick="return confirm('are your sure?')" name="submit">Сохранить и добавить пост</button>
+        <button class="btn btn-info" type="submit" onclick="return confirm('are your sure?')" name="submit">Сохранить изменения в  пост</button>
     </div>
     </form>
     </div>
 </main>
-<script src="js/vendors.bundle.js"></script>
-    <script src="js/app.bundle.js"></script>
+<script src="{{ asset('js/vendors.bundle.js') }}"></script>
+    <script src="{{ asset('js/app.bundle.js') }}"></script>
     <script>
 
         $(document).ready(function()
@@ -214,8 +222,8 @@
 @endsection
 
 @section('script')
-<script src="js/vendors.bundle.js"></script>
-    <script src="js/app.bundle.js"></script>
+<script src="{{ asset('js/vendors.bundle.js') }}"></script>
+    <script src="{{ asset('js/app.bundle.js') }}"></script>
     <script>
 
         $(document).ready(function()

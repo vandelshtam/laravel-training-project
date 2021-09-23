@@ -4,8 +4,10 @@ namespace App\Models;
 
 use App\Models\Chat;
 use App\Models\Post;
+use App\Models\Social;
 use App\Models\Message;
-use App\Models\Users_list;
+use App\Models\Userlist;
+
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -26,6 +28,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'info_id',
+        'social_id',
     ];
 
     /**
@@ -48,9 +52,9 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
-    public function post()
+    public function posts()
     {
-        return $this->belongsTo(Post::class);
+        return $this->hasMany(Post::class);
     }
     public function infos()
     {
@@ -83,5 +87,16 @@ class User extends Authenticatable
     {
         return $this->morphOne(Userlist::class, 'userlistable');
     }
-    
+    public function info()
+    {
+        return $this->belongsTo(Info::class);
+    }
+    public function social()
+    {
+        return $this->belongsTo(Social::class);
+    }
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class);
+    }
 }

@@ -11,29 +11,46 @@
     @endsection
 
     @section('style')
-    <link id="vendorsbundle" rel="stylesheet" media="screen, print" href="css/vendors.bundle.css">
-    <link id="appbundle" rel="stylesheet" media="screen, print" href="css/app.bundle.css">
-    <link id="myskin" rel="stylesheet" media="screen, print" href="css/skins/skin-master.css">
-    <link rel="stylesheet" media="screen, print" href="css/fa-solid.css">
-    <link rel="stylesheet" media="screen, print" href="css/fa-brands.css">
+    <link id="vendorsbundle" rel="stylesheet" media="screen, print" href="{{ asset('css/vendors.bundle.css') }}">
+    <link id="appbundle" rel="stylesheet" media="screen, print" href="{{ asset('css/app.bundle.css') }}">
+    <link id="myskin" rel="stylesheet" media="screen, print" href="{{ asset('css/skins/skin-master.css') }}">
+    <link rel="stylesheet" media="screen, print" href="{{ asset('css/fa-solid.css') }}">
+    <link rel="stylesheet" media="screen, print" href="{{ asset('css/fa-brands.css') }}">
     @endsection
 
     @section('nav')
     <nav class="navbar navbar-expand-lg navbar-dark bg-primary bg-primary-gradient">
-        <a class="navbar-brand d-flex align-items-center fw-500" href="users.html"><img alt="logo" class="d-inline-block align-top mr-2" src="img/logo.png"> Учебный проект</a> <button aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarColor02" data-toggle="collapse" type="button"><span class="navbar-toggler-icon"></span></button>
+        <a class="navbar-brand d-flex align-items-center fw-500" href="users.html"><img alt="logo" class="d-inline-block align-top mr-2" src="{{ asset('img/logo.png') }}"> Учебный проект</a> <button aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarColor02" data-toggle="collapse" type="button"><span class="navbar-toggler-icon"></span></button>
         <div class="collapse navbar-collapse" id="navbarColor02">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Главная <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="/">Главная <span class="sr-only">(current)</span></a>
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto">
+                @if(Auth::check())
                 <li class="nav-item">
-                    <a class="nav-link" href="page_login.html">Войти</a>
+                    <a class="nav-link">Вы вошли как {{ Auth::user()->name }}</a>
                 </li>
+                @endif
+            </ul>
+            <ul class="navbar-nav md-3">
+                @if(Auth::check() && Auth::user()->admin)
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Выйти</a>
+                    <a class="nav-link">Вы администратор</a>
                 </li>
+                @endif
+            </ul>
+            <ul class="navbar-nav md-3">
+                @if(Auth::check())
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">Выйти</a>
+                </li>
+                @else
+                <li class="nav-item">
+                    <a class="nav-link" href="/login">Войти</a>
+                </li>
+                @endif
             </ul>
         </div>
     </nav>
@@ -57,7 +74,7 @@
                             </div>
                             <div class="panel-content">
                                 <div class="form-group">
-                                    <img src="{{ $user->avatar }}" alt="" class="img-responsive" width="200">
+                                    <img src="{{ asset($user->info->avatar) }}" alt="" class="img-responsive" width="200">
                                 </div>
                                 <div class="form-group">
                                     <label class="form-label" for="example-fileinput">Выберите аватар</label>
@@ -76,8 +93,8 @@
     @endsection
 
     @section('script')
-    <script src="js/vendors.bundle.js"></script>
-    <script src="js/app.bundle.js"></script>
+    <script src="{{ asset('js/vendors.bundle.js') }}"></script>
+    <script src="{{ asset('js/app.bundle.js') }}"></script>
     <script>
 
         $(document).ready(function()

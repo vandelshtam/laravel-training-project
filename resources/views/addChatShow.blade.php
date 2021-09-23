@@ -30,10 +30,10 @@
                 <a class="nav-link" href="/">Главная <span class="sr-only">(current)</span></a>
             </li>
         </ul>
-        @if($chatsAll==1)
+        @if($navigate['chatsAll']==1)
         <ul class="navbar-nav md-3">
             <li class="nav-item active">
-                <a class="nav-link btn btn-danger" href="/chats" >Все чаты <span class="sr-only">(current)</span></a>
+                <a class="nav-link  text-danger" href="/chats" >Все чаты <span class="sr-only">(current)</span></a>
             </li>
         </ul>
         @else
@@ -43,10 +43,10 @@
             </li>
         </ul>
         @endif
-        @if ($myChats==1)
+        @if ($navigate['myChats']==1)
         <ul class="navbar-nav md-3">
             <li class="nav-item active">
-                <a class="nav-link btn btn-danger" href="/chatsMy" >Мои чаты <span class="sr-only">(current)</span></a>
+                <a class="nav-link  text-danger" href="/chatsMy" >Мои чаты <span class="sr-only">(current)</span></a>
             </li>
         </ul>    
         @else
@@ -56,10 +56,10 @@
             </li>
         </ul>
         @endif
-        @if ($favorites==1)
+        @if ($navigate['favorites']==1)
         <ul class="navbar-nav md-3">
             <li class="nav-item active">
-                <a class="nav-link btn btn-danger" href="/chatsFavorites" >Избранные чаты <span class="sr-only">(current)</span></a>
+                <a class="nav-link text-danger" href="/chatsFavorites" >Избранные чаты <span class="sr-only">(current)</span></a>
             </li>
         </ul> 
         @else
@@ -69,10 +69,10 @@
             </li>
         </ul>   
         @endif
-        @if ($searchChats==1)
+        @if ($navigate['searchChats']==1)
         <ul class="navbar-nav md-3">
             <li class="nav-item active">
-                <a class="nav-link btn btn-danger" href="#" >Вы в режиме поиска <span class="sr-only">(current)</span></a>
+                <a class="nav-link text-danger" href="#" >Вы в режиме поиска <span class="sr-only">(current)</span></a>
             </li>
         </ul> 
         @endif
@@ -185,7 +185,7 @@
                                     <div id="c_1" class="card border shadow-0 mb-g shadow-sm-hover" data-filter-tags="">
                                         <div class="card-body border-faded border-top-0 border-left-0 border-right-0 rounded-top">
                                             <div class="d-flex flex-row align-items-center">
-                                                    <span class="rounded-circle profile-image d-block" style="background-image:url('{{ $user->avatar}}'); background-size: cover;"></span>
+                                                    <span class="rounded-circle profile-image d-block" style="background-image:url('{{ $user->info->avatar}}'); background-size: cover;"></span>
                                                 </span>
                                                 <div class="info-card-text flex-1 md-1">
                                                     <a href="javascript:void(0);" class="fs-xl text-truncate text-truncate-lg text-info" data-toggle="dropdown" aria-expanded="false">
@@ -228,7 +228,7 @@
 
        <!-- конопка добавления поста -->
        <div class="col-md-12 mt-3 d-flex flex-row-reverse">
-        <button class="btn btn-info" type="submit" name="submit">Сохранить и добавить пост</button>
+        <button class="btn btn-info" type="submit" name="submit">Создать новый чат</button>
     </div>
     </form>
     </div>

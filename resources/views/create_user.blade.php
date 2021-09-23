@@ -26,7 +26,7 @@
     <div class="collapse navbar-collapse" id="navbarColor02">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="#">Главная <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="/">Главная <span class="sr-only">(current)</span></a>
             </li>
         </ul>
         <ul class="navbar-nav ml-auto">
@@ -36,7 +36,14 @@
             </li>
             @endif
         </ul>
-        <ul class="navbar-nav ml-auto">
+        <ul class="navbar-nav md-3">
+            @if(Auth::check() && Auth::user()->admin)
+            <li class="nav-item">
+                <a class="nav-link">Вы администратор</a>
+            </li>
+            @endif
+        </ul>
+        <ul class="navbar-nav md-3">
             @if(Auth::check())
             <li class="nav-item">
                 <a class="nav-link" href="/logout">Выйти</a>

@@ -30,7 +30,7 @@
                 <a class="nav-link" href="/">Главная <span class="sr-only">(current)</span></a>
             </li>
         </ul>
-        @if($chatsAll==1)
+        @if($navigate['chatsAll']==1)
         <ul class="navbar-nav md-3">
             <li class="nav-item active">
                 <a class="nav-link text-danger" href="/chats" >Все чаты <span class="sr-only">(current)</span></a>
@@ -43,7 +43,7 @@
             </li>
         </ul>
         @endif
-        @if ($myChats==1)
+        @if ($navigate['myChats']==1)
         <ul class="navbar-nav md-3">
             <li class="nav-item active">
                 <a class="nav-link text-danger" href="/chatsMy" >Мои чаты <span class="sr-only">(current)</span></a>
@@ -56,7 +56,7 @@
             </li>
         </ul>
         @endif
-        @if ($favorites==1)
+        @if ($navigate['favorites']==1)
         <ul class="navbar-nav md-3">
             <li class="nav-item active">
                 <a class="nav-link text-danger" href="/chatsFavorites" >Избранные чаты <span class="sr-only">(current)</span></a>
@@ -69,7 +69,7 @@
             </li>
         </ul>   
         @endif
-        @if ($searchChats==1)
+        @if ($navigate['searchChats']==1)
         <ul class="navbar-nav md-3">
             <li class="nav-item active">
                 <a class="nav-link text-danger" href="#" >Вы в режиме поиска <span class="sr-only">(current)</span></a>
@@ -78,7 +78,7 @@
         @endif
         <ul class="navbar-nav md-3">
             <li class="nav-item active">
-                <a class="nav-link text-warning" href="/posts" >Страница постов <span class="sr-only">(current)</span></a>
+                <a class="nav-link text-warning" href="/posts" >Перейти на страницу постов <span class="sr-only">(current)</span></a>
             </li>
         </ul> 
         <ul class="navbar-nav ml-auto">
@@ -155,7 +155,7 @@
                 </div>
             </div>
 
-            <!-- вывод списка всех чатов для Админа -->
+            <!-- вывод списка всех чатов  -->
             <div class="row" id="js-contacts">
                 @if(Auth::check() || auth()->user()->admin)
                 @foreach ($chats as $chat)
@@ -164,17 +164,14 @@
                     <div id="c_1" class="card border shadow-0 mb-g shadow-sm-hover" data-filter-tags="">
                         <div class="card-body border-faded border-top-0 border-left-0 border-right-0 rounded-top">
                             <div class="d-flex flex-row align-items-center">
-                                <!-- статус пользователя -->
-                                @if ($chat -> status_chat == 0)
+                                <!-- статус чата -->
+                                @if ($chat -> banned == 0)
                                     <span class="status status-success mr-3">
                                 @endif
-                                @if ($chat -> status_chat == 1)
+                                @if ($chat -> banned == 1)
                                     <span class="status status-danger mr-3">
                                 @endif
-                                @if ($chat -> status_chat == 2)
-                                    <span class="status status-warning mr-3">
-                                @endif
-                                    <span class="rounded-circle profile-image d-block " style="background-image:url('{{ App\Models\Chat::find($chat->chat_id)->chat_avatar }}'); background-size: cover;"></span>
+                                    <span class="rounded-circle profile-image d-block " style="background-image:url('{{ $chat->chat_avatar }}'); background-size: cover;"></span>
                                 </span>
                                 <div class="info-card-text flex-1">
                                     <a href="javascript:void(0);" class="fs-xl text-truncate text-truncate-lg text-info" data-toggle="dropdown" aria-expanded="false">
@@ -184,39 +181,57 @@
                                     </a>
 
                                     <!--выпадающее подменю-->
-                                    @if (auth()->user()->admin  || (auth()->user()->id == $chat->author_user_id && ($chat->banned !=1)))
+                                    @if (auth()->user()->admin  || (Auth::check() && $chat->banned !=1))
                                     <div class="dropdown-menu">
                                         <a class="dropdown-item" href="/openChat/{{ $chat->id }}">
                                             <i class="fa fa-edit"></i>
-                                        Открыть чат</a>
+                                        Открыть чат</a> 
                                         @if ($chat->favorites==1)
-                                        <a class="dropdown-item btn-warning" href="/offFavorites/{{ $chat->chat_id }}">
+                                        <a class="dropdown-item btn-warning" href="/offFavorites/{{ $chat->id }}">
                                             <i class="fa fa-lock"></i>
                                         Удалить из  избранного</a>    
                                         @else
-                                        <a class="dropdown-item" href="/onFavorites/{{ $chat->chat_id }}">
+                                        <a class="dropdown-item" href="/onFavorites/{{ $chat->id }}">
                                             <i class="fa fa-lock"></i>
                                         Добавить в избранные</a>
                                         @endif
-                                        <a href="/editChatShow/{{ $chat->chat_id }}" class="dropdown-item" >
+                                        
+                                        @if (auth()->user()->admin  
+                                        || (auth()->user()->id == $chat->author_user_id && ($chat->banned !=1)) 
+                                        || DB::table('userlists')
+                                        ->where('chat_id', $chat->id)
+                                        ->where('user_id', auth()->user()->id)
+                                        ->select('*')
+                                        ->first()
+                                        ->role == 'moderator')
+                                        <a href="/editChatShow/{{ $chat->id }}" class="dropdown-item" >
                                             <i class="fa fa-window-close"></i>
                                         Редактировать чат
                                         </a>
+                                        @endif
                                         @if (Auth()->user()->admin)
                                             @if ($chat->banned == 1)
-                                            <a class="dropdown-item btn-warning" href="/offBannedChat/{{ $chat->chat_id }}">
+                                            <a class="dropdown-item btn-warning" href="/offBannedChat/{{ $chat->id }}">
                                                 <i class="fa fa-lock"></i>
                                             Разблокировать чат</a>
                                             @else
-                                            <a class="dropdown-item btn-warning" href="/onBannedChat/{{ $chat->chat_id }}">
+                                            <a class="dropdown-item btn-warning" href="/onBannedChat/{{ $chat->id }}">
                                                 <i class="fa fa-lock"></i>
                                             Заблокировать чат</a>      
                                             @endif   
-                                        @endif   
-                                        <a href="/deleteChat/{{ $chat->chat_id }}" class="dropdown-item" onclick="return confirm('are you sure?');">
+                                        @endif 
+                                        @if (auth()->user()->admin
+                                          || (auth()->user()->id == $chat->author_user_id && ($chat->banned !=1))
+                                          || DB::table('userlists')
+                                            ->where('chat_id', $chat->id)
+                                            ->where('user_id', auth()->user()->id)
+                                            ->select('*')
+                                            ->first()
+                                            ->role == 'moderator')  
+                                        <a href="/deleteChat/{{ $chat->id }}" class="dropdown-item" onclick="return confirm('are you sure?');">
                                             <i class="fa fa-window-close"></i>
-                                        Удалить чат
-                                        </a>   
+                                        Удалить чат</a>
+                                        @endif   
                                     </div>
                                     @endif
                                     @if ( Auth::user()->admin || (auth()->user()->id == $chat->author_user_id && ($chat->banned !=1)))
@@ -225,9 +240,11 @@
                                     @endif
                                     <span class="text-truncate text-truncate-xl">{{ $chat->location }}</span>
                                 </div>
-                                    <span class="text-truncate text-truncate-xl md-3">Автор чата {{ App\Models\User::find($chat->author_user_id)->name }}-#-</span>
+                                    <span class="text-truncate text-truncate-xl md-3">Автор чата - {{ App\Models\User::find($chat->author_user_id)->name }} </span>
+                                    <span class="text-truncate text-truncate-xl">*</span>
                                 @if ($chat->banned==1)
                                     <span class="text-truncate text-truncate-xl md-3">Чат заблокирован</span>
+                                    
                                 @else
                                     <span class="text-truncate text-truncate-xl md-3">Активный чат</span>
                                 @endif

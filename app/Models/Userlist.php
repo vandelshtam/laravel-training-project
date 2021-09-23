@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Chat;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Userlist extends Model
 {
@@ -28,12 +30,22 @@ class Userlist extends Model
     {
         return $this->belongsTo(User::class);
     }
+    /*
     public function users()
     {
         return $this->belongsToMany(User::class);
     }
+    */
     public function infos()
     {
         return $this->belongsToMany(Info::class);
+    }
+    public function chats()
+    {
+        return $this->hasMany(Chat::class);
+    }
+    public function users()
+    {
+        return $this->hasMany(User::class);
     }
 }

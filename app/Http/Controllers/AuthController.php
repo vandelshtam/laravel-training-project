@@ -58,23 +58,30 @@ class AuthController extends BaseController
             'email' => $this->request->email,
             'password' => Hash::make($this->request->password)
         ]);
-        $userInfos = DB::table('infos')->insert([
+        $userInfos_id = DB::table('infos')->insertGetId([
             'occupation' => '',
             'location' => '',
             'position' => '',
             'phone' => '',
             'avatar' => 'img/demo/avatars/avatar-m.png',
-            'user_id' => $id
+            'user_id' => $id,
+            'infosable_id' => $id,
+
         ]);
-        $userSocials = DB::table('socials')->insert([
+        $userSocials_id = DB::table('socials')->insertGetId([
             'telegram' => '',
             'instagram' => '',
             'vk' => '',
             'user_id' => $id
         ]);
+
+        DB::table('users')
+              ->where('id', $id)
+              ->update(['info_id' => $userInfos_id,
+                        'social_id' => $userSocials_id]);
         
         //сообщение об успешной регистрации нового пользователя
-        if($id == true && $userInfos == true && $userSocials == true){
+        if($id == true && $userInfos_id == true && $userSocials_id == true){
         
             //Mail::to('mvlju977@gmail.com')->send(new Feedback());
             $this->request->session()->flash('flash_message_success','Вы успешно зарегестрированы, пожалуйста авторизуйтесь!!!');

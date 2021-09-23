@@ -11,19 +11,19 @@
 @endsection
 
 @section('style')
-    <link id="vendorsbundle" rel="stylesheet" media="screen, print" href="css/vendors.bundle.css">
-    <link id="appbundle" rel="stylesheet" media="screen, print" href="css/app.bundle.css">
-    <link id="myskin" rel="stylesheet" media="screen, print" href="css/skins/skin-master.css">
-    <link rel="stylesheet" media="screen, print" href="css/fa-solid.css">
-    <link rel="stylesheet" media="screen, print" href="css/fa-brands.css">
-    <link rel="stylesheet" media="screen, print" href="css/fa-regular.css"> 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous"> 
+    <link id="vendorsbundle" rel="stylesheet" media="screen, print" href="{{ asset('css/vendors.bundle.css') }}">
+    <link id="appbundle" rel="stylesheet" media="screen, print" href="{{ asset('css/app.bundle.css') }}">
+    <link id="myskin" rel="stylesheet" media="screen, print" href="{{ asset('css/skins/skin-master.css') }}">
+    <link rel="stylesheet" media="screen, print" href="{{ asset('css/fa-solid.css') }}">
+    <link rel="stylesheet" media="screen, print" href="{{ asset('css/fa-brands.css') }}">
+    <link rel="stylesheet" media="screen, print" href="{{ asset('css/fa-regular.css') }}"> 
+    
     
 @endsection
 
 @section('navchat')
 <nav class="navbar navbar-expand-lg navbar-dark bg-info bg-info-gradient">
-    <a class="navbar-brand d-flex align-items-center fw-500" href="users.html"><img alt="logo" class="d-inline-block align-top mr-2" src="">Страница постов</a> <button aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarColor02" data-toggle="collapse" type="button"><span class="navbar-toggler-icon"></span></button>
+    <a class="navbar-brand d-flex align-items-center fw-500" href="users.html"><img alt="logo" class="d-inline-block align-top mr-2" src="{{ asset('img/logo.png') }}">Страница постов</a> <button aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarColor02" data-toggle="collapse" type="button"><span class="navbar-toggler-icon"></span></button>
     <div class="collapse navbar-collapse" id="navbarColor02">
         <ul class="navbar-nav md-3">
             <li class="nav-item active">
@@ -115,7 +115,7 @@
                                     <a class="dropdown-item"  href="/addFavorites/{{ $post->id }}">
                                         <i class="fa fa-sun btn btn-info"></i>Добавить в избранное</a>
                                  @endif 
-                                @if ( auth()->user()->admin || auth()->user()->id == $user->id)
+                                @if ( auth()->user()->admin || auth()->user()->id == $post->user_id)
                                 <!-- повторное подтверждение пароля для безопасности -->
                                 <a class="dropdown-item" onclick="return confirm('are your sure?')" href="/confirm-password/{{ $post->id }}/{{ 'deletePost' }}"">
                                     <i class="fa fa-window-close btn btn-info"></i>
@@ -130,26 +130,50 @@
                                 @endif     
                             <!-- show post -->    
                             @if (Auth::user()->admin && $post->banned==1)
-                            <img src="{{ $post->avatar_post }}" class="rounded-circle shadow-2 img-thumbnail bt btn-warning" alt="" style="width: 80%">
+                            <img src="{{ asset($post->avatar_post) }}" class="rounded-circle shadow-2 img-thumbnail bt btn-warning" alt="logo" style="width: 80%">
                             @elseif ($post->banned==1) 
-                            <img src="img/demo/avatars/avatar-admin-lg.png" class="rounded-circle shadow-2 img-thumbnail" alt="" style="width: 80%">  
+                            <img src="{{ asset('img/demo/avatars/avatar-admin-lg.png') }}" class="rounded-circle shadow-2 img-thumbnail" alt="" style="width: 80%">  
                             @else
-                            <img src="{{ $post->avatar_post }}" class="rounded-circle shadow-2 img-thumbnail" alt="" style="width: 80%">
+                            <img src="{{ asset($post->avatar_post) }}" class="rounded-circle shadow-2 img-thumbnail" alt="" style="width: 80%">
                             @endif
                             <br>
                             <hr> 
-                            <div class="container">
-                                <h2 align="center">Галерея</h2>
-                                @if(Auth::user()->admin && $post->banned==1)
 
-                                @foreach ($post->images as $image)
-                                <div class="row">    
-                                    <div class="coll-md-12">        
-                                        <img  src="{{ $image->image }}" alt="" class="img-fluid img-thumbnail gallery-image">
-                                    </div>    
+                            <!-- вывод галереи заблокированного поста для админа-->
+                            @if(auth()->user()->admin && $post->banned==1)           
+                            <div class="container">
+                                <h2 align="center">Галерея заблокированного поста</h2>
+                                <div class="row">
+                                    @foreach ($post->images as $image)
+                                        <div class="col-md-3 galery-item">
+                                            <div>
+                                                <img src="{{ asset($image->image) }}" alt="" class="img-fluid img-thumbnail" ">
+                                            </div>
+                                        <input type="file" id="example-fileinput" class="form-control-file" name="delete_image" hidden>    
+                                        <a href="/imagePostShow/{{ $image->id }}" onclick="return confirm('are your sure?')" class="btn btn-info my-button">Open image</a>
+                                        </div>
+                                    @endforeach   
                                 </div>
-                                @endforeach
-                            </div>   
+                            </div>
+                            @endif
+                            @if($post->banned==0)
+                            <!-- галерея  не заблокированного поста -->
+                            <div class="container">
+                                <h2 align="center">Галерея поста</h2>
+                                <div class="row">
+                                    @foreach ($post->images as $image)
+                                        <div class="col-md-3 galery-item">
+                                            <div>
+                                                <img src="{{ asset($image->image) }}" alt="" class="img-fluid img-thumbnail" ">
+                                            </div>
+                                           
+                                        <a href="/imagePostShow/{{ $image->id }}"  class="btn btn-info my-button">Open image</a>
+                                        </div>
+                                    @endforeach   
+                                </div>
+                            </div>
+                            @endif
+                            @if( Auth::user()->admin && $post->banned==1)    
                             <h5 class="mb-0 fw-700 text-center mt-3">
                                 <small class="text-muted mb-0 bt btn-danger">Пост заблокирован из-за нарушения правил изспользования веб сайта
                                 </small>
@@ -163,23 +187,14 @@
                                     <div class="coll-md-12">        
                                         <img  src="img/demo/avatars/avatar-admin-lg.png" alt="" class="img-fluid img-thumbnail gallery-image">
                                     </div>    
-                                </div>    
-                            </div>   
+                                </div>      
                             <h5 class="mb-0 fw-700 text-center mt-3 bt btn-danger">
                                 Пост заблокирован из-за нарушения правил изспользования веб сайта
                                 <small class="text-muted mb-0 bt btn-danger">Пост заблокирован из-за нарушения правил изспользования веб сайта
                                     </small>
                                     <hr>
                             </h5>
-                            @else
-                            @foreach ($post->images as $image)
-                                <div class="row">       
-                                    <div class="coll-md-12">        
-                                        <img  src="{{ $image->image }}" alt="" class="img-fluid img-thumbnail gallery-image">
-                                    </div>    
-                                </div>
-                                @endforeach
-                            </div>   
+                            @else 
                             <h5 class="mb-0 fw-700 text-center mt-3">
                                 {{ $post->title_post }} 
                                 <small class="text-muted mb-0">{{ $post->text }}
@@ -188,18 +203,18 @@
                             </h5>
                             @endif
                             <h5 class="mb-0 fw-700 text-center mt-3">
-                                {{ $user->name }}
-                                <small class="text-muted mb-0">{{ $social->location }}</small>
+                                {{ $post->user->name }}
+                                <small class="text-muted mb-0">{{ $post->info->location }}</small>
                             </h5>
                             <div class="mt-4 text-center demo">
                                 <a href="javascript:void(0);" class="fs-xl" style="color:#C13584">
-                                    <i class="fab fa-instagram">{{ $social->instagram }}</i>
+                                    <i class="fab fa-instagram">{{ $post->social->instagram }}</i>
                                 </a>
                                 <a href="javascript:void(0);" class="fs-xl" style="color:#4680C2">
-                                    <i class="fab fa-vk">{{ $social->vk }}</i>
+                                    <i class="fab fa-vk">{{ $post->social->vk }}</i>
                                 </a>
                                 <a href="javascript:void(0);" class="fs-xl" style="color:#0088cc">
-                                    <i class="fab fa-telegram">{{ $social->telegram }}</i>
+                                    <i class="fab fa-telegram">{{ $post->social->telegram }}</i>
                                 </a>
                             </div>
                         </div>
@@ -207,25 +222,26 @@
                     <div class="col-12">
                         <div class="p-3 text-center">
                             <a href="tel:+13174562564" class="mt-1 d-block fs-sm fw-400 text-dark">
-                                <i class="fas fa-mobile-alt text-muted mr-2"></i>{{$info->phone}}</a>
+                                <i class="fas fa-mobile-alt text-muted mr-2"></i>{{$post->info->phone}}</a>
                             <a href="mailto:oliver.kopyov@marlin.ru" class="mt-1 d-block fs-sm fw-400 text-dark">
-                                <i class="fas fa-mouse-pointer text-muted mr-2"></i> {{ $user->email }}</a>
+                                <i class="fas fa-mouse-pointer text-muted mr-2"></i> {{ $post->user->email }}</a>
                             <address class="fs-sm fw-400 mt-4 text-muted">
-                                <i class="fas fa-map-pin mr-2"></i> {{ $info->occupation }}
+                                <i class="fas fa-map-pin mr-2"></i> {{ $post->info->occupation }}
                             </address>
                         </div>
                     </div>
                 </div>
             </div>
        </div>
-       <form action="#" method="POST" enctype="multipart/form-data" class="col-lg-10 col-xl-10 m-auto">
+       <!-- форма ввода коментария -->
+       <form action="/addNewComment/{{ $post->id }}" method="POST" enctype="multipart/form-data" class="col-lg-10 col-xl-10 m-auto">
         {{ csrf_field() }}
         <div class="col-lg-12 col-xl-12 m-auto">
-                <!-- текст поста -->
+                <!-- текст коментария -->
                     <div class="form-group">
                         <label class="form-label" for="simpleinput">Введите текст комментария</label>
-                        <input type="text" id="simpleinput" class="form-control" name="comment" value="{{old('comment')}}" style="height: 100px">
-                        <input type="text" id="simpleinput" class="form-control" name="user_id" value="{{ Auth::id()}}" style="height: 100px" hidden>
+                        <input type="text" id="simpleinput" class="form-control" name="comment" value="{{old('comment')}}">
+                        <input type="text" id="simpleinput" class="form-control" name="user_id" value="{{ Auth::id()}}"  hidden>
                     </div>                                     
         </div>       
          <div class="col-md-12 mt-3 d-flex flex-row-reverse">
@@ -235,9 +251,9 @@
     </div>
     <br>
     <br>
-       
-      <script src="js/vendors.bundle.js"></script>
-      <script src="js/app.bundle.js"></script>
+    
+      <script src="{{ asset('js/vendors.bundle.js') }}"></script>
+      <script src="{{ asset('js/app.bundle.js') }}"></script>
       <script>
   
           $(document).ready(function()
@@ -253,17 +269,17 @@
 
 
 <!-- навигационная строка раздела комментариев -->
-<nav id="navbar-example2" class="navbar navbar-light bg-info px-3 m-auto" style="width: 83%;">
+<nav id="navbar-example2" class="navbar navbar-light bg-info px-3 m-auto col-md-10" style="border-radius: 5px;">
     <a class="navbar-brand" href="#">Комментарии</a>
     <ul class="nav nav-pills">
       <li class="nav-item">
-        <a class="nav-link" href="#scrollspyHeading1">Сначала новые</a>
+        <a class="nav-link text-white" href="#scrollspyHeading1">Сначала новые</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#scrollspyHeading2">Сначала старые</a>
+        <a class="nav-link text-white"" href="#scrollspyHeading2">Сначала старые</a>
       </li>
       <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Меню</a>
+        <a class="nav-link dropdown-toggle text-white"" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Меню</a>
         <ul class="dropdown-menu">
           <li><a class="dropdown-item" href="#scrollspyHeading3">меню1</a></li>
           <li><a class="dropdown-item" href="#scrollspyHeading4">меню2</a></li>
@@ -279,53 +295,53 @@
     @foreach ($post->comments as $comment)
     <!-- комментарии авторизованного пользователя -->
     @if (Auth::id() == $comment->user_id )
-    <div style="width: 70%; margin:20px 0px 0px 285px;">
-        <div class="toast-header bg-info">
-        <img src="{{ $info->avatar }}" class="rounded me-2" alt="logo">
-        <strong class="me-auto">{{ App\Models\Comment::find($comment->user_id)->user->name }}</strong>
-        <small >{{ $comment->updated_at }}</small>
+    <div style="width: 70%; margin:20px 0px 0px 245px;">
+        <div class="toast-header bg-info md-3" style="border-radius:5px 5px 0px 0px;">
+        <span class="rounded-circle profile-image d-block md-3" style="background-image:url('{{ asset($comment->user->info->avatar) }}'); background-size: cover;"> </span>
+        <strong class="md-3">{{ $comment->user->name }}</strong>
+        <small class="ml-auto"> {{ $comment->updated_at }} </small>
         <!-- заблокированные коментарии -->
         @if (Auth::user()->admin && $comment->banned==1)
-            <a class="bt btn-warning "  href="/unBannedComment/{{ $comment->id }}/{{ $post->id }}">
-                <i class="fa fa-sun btn btn-warning"></i>Разблокировать комментарий</a>   
+            <a class="bt btn-warning ml-auto"  href="/unBannedComment/{{ $comment->id }}/{{ $post->id }}">
+                <i class="fa fa-sun btn btn-warning"> </i>Разблокировать комментарий</a>   
         @elseif (Auth::user()->admin)
-            <a class="bt btn-warning "  href="/bannedComment/{{ $comment->id }}/{{ $post->id }}">
-                <i class="fa fa-sun btn btn-danger"></i>Заблокировать комментарий</a>
+            <a class="bt text-warning ml-auto"  href="/bannedComment/{{ $comment->id }}/{{ $post->id }}">
+                <i class="fa fa-sun btn btn-danger"> </i>Заблокировать комментарий</a>
         @endif     
-        <a class=" btn-close " onclick="return confirm('are your sure?')" aria-label="Close"  href="/deleteComment/{{ $comment->id }}/{{ $post->id }}"></a>
+        <a class=" btn-close ml-auto" onclick="return confirm('are your sure?')" aria-label="Close"  href="/deleteComment/{{ $comment->id }}/{{ $post->id }}"> Удалить комментарий</a>
         </div>
         @if ( Auth::user()->admin && $comment->banned==1)
-        <h6 id="scrollspyHeading1 btn-danger" style="background:rgb(245, 158, 118); padding:20px 0px 20px 20px;"> Комментарий заблокирован из-за нарушения правил пользования веб сайтом : {{ $comment->comment }}</h6>    
+        <h6 id="scrollspyHeading1 btn-danger" style="background:rgb(245, 158, 118); padding:20px 0px 20px 20px;border-radius:0px 0px 5px 5px;"> Комментарий заблокирован из-за нарушения правил пользования веб сайтом : {{ $comment->comment }}</h6>    
         @elseif ($comment->banned==1)
-        <h6 id="scrollspyHeading1" style="background:rgb(247, 169, 150); padding:40px 0px 20px 40px;">Комментарий заблокирован из-за нарушения правил пользования веб сайтом </h6>
+        <h6 id="scrollspyHeading1" style="background:rgb(247, 169, 150); padding:40px 0px 20px 40px;border-radius:0px 0px 5px 5px;">Комментарий заблокирован из-за нарушения правил пользования веб сайтом </h6>
         @else
-        <h6 id="scrollspyHeading1" style="background:rgb(247, 240, 150); padding:20px 0px 20px 20px;">{{ $comment->comment }}</h6>
+        <h6 id="scrollspyHeading1" style="background:rgb(247, 240, 150); padding:20px 0px 20px 20px; border-radius:0px 0px 5px 5px;">{{ $comment->comment }}</h6>
         @endif
     </div> 
 
     <!-- коментарии других пользователей -->
     @else
-    <div style="width: 70%; margin:20px 0px 0px 110px;">
-        <div class="toast-header bg-info">
-        <img src="{{ $info->avatar }}" class="rounded me-2" alt="logo">
-        <strong class="me-auto">{{ App\Models\Comment::find($comment->user_id)->user->name }}</strong>
-        <small>{{ $comment->updated_at}}</small>
+    <div style="width: 70%; margin:20px 0px 0px 105px;" >
+        <div class="toast-header bg-info" style="border-radius:5px 5px 0px 0px;">
+        <span class="rounded-circle profile-image d-block " style="background-image:url('{{ asset($comment->user->info->avatar) }}'); background-size: cover;"></span>
+        <strong class="md-3">{{ $comment->user->name }}</strong>
+        <small class="ml-auto">{{ $comment->updated_at}}</small>
         <!-- заблокированные коментарии -->
         @if (Auth::user()->admin && $comment->banned==1)
-            <a class="bt btn-warning "  href="/unBannedComment/{{ $comment->id }}/{{ $post->id }}">
+            <a class="bt btn-warning ml-auto"  href="/unBannedComment/{{ $comment->id }}/{{ $post->id }}">
                 <i class="fa fa-sun btn btn-warning"></i>Разблокировать комментарий</a>   
-        @elseif (Auth::user()->admin)
-            <a class="bt btn-warning "  href="/bannedComment/{{ $comment->id }}/{{ $post->id }}">
+        @elseif (Auth::user()->admin && $comment->banned==0)
+            <a class="text-danger ml-auto"  href="/bannedComment/{{ $comment->id }}/{{ $post->id }}">
                 <i class="fa fa-sun btn btn-danger"></i>Заблокировать комментарий</a>
         @endif 
-        <a class=" btn-close " onclick="return confirm('are your sure?')" aria-label="Close"  href="/deleteComment/{{ $comment->id }}/{{ $post->id }}"></a>    
+        <a class=" btn-close ml-auto" onclick="return confirm('are your sure?')" aria-label="Close"  href="/deleteComment/{{ $comment->id }}/{{ $post->id }}">Удалить комментарий</a>    
         </div>
     @if (Auth::user()->admin && $comment->banned==1)
     <h6 id="scrollspyHeading1 btn-danger" style="background:rgb(247, 163, 163); padding:20px 0px 20px 20px; "> Комментарий заблокирован из-за нарушения правил пользования веб сайтом :  {{ $comment->comment }}</h6>    
     @elseif ($comment->banned==1)
     <h6 id="scrollspyHeading1 btn-danger" style="background:rgb(247, 163, 167); padding:20px 0px 20px 20px; "> Комментарий заблокирован из-за нарушения правил пользования веб сайтом</h6>
     @else
-    <h6 id="scrollspyHeading1" style="background:rgb(163, 216, 247); padding:20px 0px 20px 20px; ">{{ $comment->comment }}</h6>
+    <h6 id="scrollspyHeading1" style="background:rgb(163, 216, 247); padding:20px 0px 20px 20px;border-radius:0px 0px 5px 5px; ">{{ $comment->comment }}</h6>
     @endif
     </div> 
   </div>
@@ -334,9 +350,9 @@
 @endsection
 
 @section('script')
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
-<script src="js/vendors.bundle.js"></script>
-    <script src="js/app.bundle.js"></script>
+
+<script src="{{ asset('js/vendors.bundle.js') }}"></script>
+    <script src="{{ asset('js/app.bundle.js') }}"></script>
     <script>
 
         $(document).ready(function()

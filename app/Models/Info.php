@@ -3,6 +3,8 @@
 namespace App\Models;
 
 
+use App\Models\Post;
+use App\Models\User;
 use App\Models\Message;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -39,5 +41,13 @@ class Info extends Model
     public function userlists()
     {
         return $this->morphMany(Userlist::class, 'userlistable');
+    }
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+    public function users()
+    {
+        return $this->hasMany(User::class);
     }
 }

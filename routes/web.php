@@ -8,6 +8,7 @@ use App\Http\Controllers\ChatsController;
 use App\Http\Controllers\PostsController;
 use App\Http\Controllers\UsersController;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -83,6 +84,11 @@ Route::get('/onFavorites/{chat_id?}', [ChatsController::class, 'onFavorites']);
 Route::get('/offFavorites/{chat_id}', [ChatsController::class, 'offFavorites']);
 Route::get('/roleModerator/{user_id}/{chat_id}', [ChatsController::class, 'roleModerator']);
 Route::get('/roleParticipant/{user_id}/{chat_id}', [ChatsController::class, 'roleParticipant']);
+Route::get('/imagePostShow/{image_id?}', [PostsController::class, 'imagePostShow']);
+Route::post('/addNewComment/{post_id?}', [PostsController::class, 'addNewComment']);
+Route::post('/downloadImage/{post_id?}/{user_id}', [PostsController::class, 'downloadImage']);
+Route::post('/changeAvatar/{post_id?}', [PostsController::class, 'changeAvatar']);
+Route::post('/editInsertPost/{post_id?}', [PostsController::class, 'editInsertPost']);
 });
 
 Route::middleware('admin')->group(function(){

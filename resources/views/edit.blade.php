@@ -11,11 +11,11 @@
     @endsection
 
     @section('style')
-    <link id="vendorsbundle" rel="stylesheet" media="screen, print" href="css/vendors.bundle.css">
-    <link id="appbundle" rel="stylesheet" media="screen, print" href="css/app.bundle.css">
-    <link id="myskin" rel="stylesheet" media="screen, print" href="css/skins/skin-master.css">
-    <link rel="stylesheet" media="screen, print" href="css/fa-solid.css">
-    <link rel="stylesheet" media="screen, print" href="css/fa-brands.css">
+    <link id="vendorsbundle" rel="stylesheet" media="screen, print" href="{{ asset('css/vendors.bundle.css') }}">
+    <link id="appbundle" rel="stylesheet" media="screen, print" href="{{ asset('css/app.bundle.css') }}">
+    <link id="myskin" rel="stylesheet" media="screen, print" href="{{ asset('css/skins/skin-master.css') }}">
+    <link rel="stylesheet" media="screen, print" href="{{ asset('css/fa-solid.css') }}">
+    <link rel="stylesheet" media="screen, print" href="{{ asset('css/fa-brands.css') }}">
     @endsection
 
     @section('nav')
@@ -27,14 +27,21 @@
                 <a class="nav-link" href="/">Главная <span class="sr-only">(current)</span></a>
             </li>
         </ul>
-        <ul class="navbar-nav ml-auto">
+        <ul class="navbar-nav md-3">
             @if(Auth::check())
             <li class="nav-item">
                 <a class="nav-link">Вы вошли как {{ Auth::user()->name }}</a>
             </li>
             @endif
         </ul>
-        <ul class="navbar-nav ml-auto">
+        <ul class="navbar-nav md-3">
+            @if(Auth::check() && Auth::user()->admin)
+            <li class="nav-item">
+                <a class="nav-link">Вы администратор</a>
+            </li>
+            @endif
+        </ul>
+        <ul class="navbar-nav md-3">
             @if(Auth::check())
             <li class="nav-item">
                 <a class="nav-link" href="/logout">Выйти</a>
@@ -70,7 +77,7 @@
         @endif
         <!-- сообщения об ошибках-->
 
-        <form action="/editUser/{{ $user->user_id }}" method="POST">
+        <form action="/editUser/{{ $user->id }}" method="POST">
             {{ csrf_field() }}
             <div class="row">
                 <div class="col-xl-6">
@@ -89,19 +96,19 @@
                                 <!-- title -->
                                 <div class="form-group">
                                     <label class="form-label" for="simpleinput">Место работы</label>
-                                    <input type="text" id="simpleinput" class="form-control" value="{{ $user->occupation }}" name="occupation">
+                                    <input type="text" id="simpleinput" class="form-control" value="{{ $user->info->occupation }}" name="occupation">
                                 </div>
 
                                 <!-- tel -->
                                 <div class="form-group">
                                     <label class="form-label" for="simpleinput">Номер телефона</label>
-                                    <input type="text" id="simpleinput" class="form-control" value="{{ $user->phone }}" name="phone">
+                                    <input type="text" id="simpleinput" class="form-control" value="{{ $user->info->phone }}" name="phone">
                                 </div>
 
                                 <!-- address -->
                                 <div class="form-group">
                                     <label class="form-label" for="simpleinput">Адрес</label>
-                                    <input type="text" id="simpleinput" class="form-control" value="{{ $user->location }}" name="location">
+                                    <input type="text" id="simpleinput" class="form-control" value="{{ $user->info->location }}" name="location">
                                 </div>
                                 <div class="col-md-12 mt-3 d-flex flex-row-reverse">
                                     <button class="btn btn-warning" type="submit" name="submit">Редактировать</button>
@@ -116,8 +123,8 @@
 @endsection
 
 @section('script')
-    <script src="js/vendors.bundle.js"></script>
-    <script src="js/app.bundle.js"></script>
+    <script src="{{ asset('js/vendors.bundle.js') }}"></script>
+    <script src="{{ asset('js/app.bundle.js') }}"></script>
     <script>
 
         $(document).ready(function()

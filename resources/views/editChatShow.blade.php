@@ -11,19 +11,19 @@
 @endsection
 
 @section('style')
-    <link id="vendorsbundle" rel="stylesheet" media="screen, print" href="css/vendors.bundle.css">
-    <link id="appbundle" rel="stylesheet" media="screen, print" href="css/app.bundle.css">
-    <link id="myskin" rel="stylesheet" media="screen, print" href="css/skins/skin-master.css">
-    <link rel="stylesheet" media="screen, print" href="css/fa-solid.css">
-    <link rel="stylesheet" media="screen, print" href="css/fa-brands.css">
-    <link rel="stylesheet" media="screen, print" href="css/fa-regular.css">   
+    <link id="vendorsbundle" rel="stylesheet" media="screen, print" href="{{ asset('css/vendors.bundle.css') }}">
+    <link id="appbundle" rel="stylesheet" media="screen, print" href="{{ asset('css/app.bundle.css') }}">
+    <link id="myskin" rel="stylesheet" media="screen, print" href="{{ asset('css/skins/skin-master.css') }}">
+    <link rel="stylesheet" media="screen, print" href="{{ asset('css/fa-solid.css') }}">
+    <link rel="stylesheet" media="screen, print" href="{{ asset('css/fa-brands.css') }}">
+    <link rel="stylesheet" media="screen, print" href="{{ asset('css/fa-regular.css') }}">   
 @endsection
 
 
 
 @section('navchat')
 <nav class="navbar navbar-expand-lg navbar-dark bg-info bg-info-gradient">
-    <a class="navbar-brand d-flex align-items-center fw-500" href="users.html"><img alt="logo" class="d-inline-block align-top mr-2" src="img/logo.png">Страница чатов</a> <button aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarColor02" data-toggle="collapse" type="button"><span class="navbar-toggler-icon"></span></button>
+    <a class="navbar-brand d-flex align-items-center fw-500" href="users.html"><img alt="logo" class="d-inline-block align-top mr-2" src="{{ asset('img/logo.png') }}">Страница чатов</a> <button aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarColor02" data-toggle="collapse" type="button"><span class="navbar-toggler-icon"></span></button>
     <div class="collapse navbar-collapse" id="navbarColor02">
         <ul class="navbar-nav md-3">
             <li class="nav-item active">
@@ -134,7 +134,7 @@
                                     </div>
                                     <div class="panel-content">
                                         <div class="form-group">
-                                            <img src="{{ $chat->chat_avatar }}" alt="" class="img-responsive" width="200">
+                                            <img src="{{ asset($chat->chat_avatar) }}" alt="" class="img-responsive" width="200">
                                         </div>      
                                     <div class="form-group">
                                         <label class="form-label" for="example-fileinput">Выберите аватар</label>
@@ -157,46 +157,43 @@
                             <h4><span class="text-truncate text-truncate-xl">Участники чата</span></h4>
                             <div class="row" id="js-contacts">
                                 
-                                @foreach ($usersInChat as $userChat)
-                                @if(auth()->user()->admin || auth()->user()->id == $chat->user_id)
+                                @foreach ($chat->userlists as $userChat)
+                                @if(auth()->user()->admin || $chat->author_user_id == auth()->user()->id)
                                 <div class="col-xl-4">
                                     <div id="c_1" class="card border shadow-0 mb-g shadow-sm-hover" data-filter-tags="">
                                         <div class="card-body border-faded border-top-0 border-left-0 border-right-0 rounded-top">
                                             <div class="d-flex flex-row align-items-center">
-                                                    <span class="rounded-circle profile-image d-block" style="background-image:url('{{ App\Models\Info::find($userChat->id)->avatar}}'); background-size: cover;"></span>
+                                                    <span class="rounded-circle profile-image d-block" style="background-image:url({{ asset($userChat->user->info->avatar) }}); background-size: cover;"></span>
                                                 </span>
                                                 <div class="info-card-text flex-1 md-1">
                                                     <a href="javascript:void(0);" class="fs-xl text-truncate text-truncate-lg text-info" data-toggle="dropdown" aria-expanded="false">
-                                                        {{ $userChat->name }}  
+                                                        {{ $userChat->user->name }}  
                                                     </a>
                 
                                                     <!--подменю-->
                                                     @if (Auth::check())
                                                         
-                                                        <a class="dropdown-item md-1" href="/profile/{{ $userChat->id }}">
+                                                        <a class="dropdown-item md-1" href="/profile/{{ $userChat->user->id }}">
                                                             <i class="fa fa-edit md-1"></i>
                                                         Открыть  профиль</a>
                                                         
-                                                            <p class="dropdown-item md-1" href="/roleParticipantShow/{{ $userChat->user_id }}/{{ $chat->id }}">
-                                                                <i class="fa fa-edit md-1"></i>
-                                                                <!-- коситыль для вывода роли пользователя, в дальнейшем исправить для вывода через связи -->
-                                                                <?php foreach($userlists->where('user_id', $userChat->id) as $role){
-                                                                    $role = $role->role;
-                                                                }?>
-                                                            Текущая роль - {{ $role }}</p>
-                                                        @if (auth()->user()->admin)
-                                                                @if($role == 'participant')
-                                                                <a class="dropdown-item md-1" href="/roleModerator/{{ $userChat->id }}/{{ $chat->id }}">
-                                                                    <i class="fa fa-edit md-1"></i>
+                                                            <p class="dropdown-item md-1" href="/roleParticipantShow/{{ $userChat->user->id }}/{{ $chat->id }}">
+                                                                <i class="fa fa-sun md-1"></i>
+                                                                
+                                                            Текущая роль - {{ $userChat->role }}</p>
+                                                        @if (auth()->user()->admin || $chat->author_user_id == auth()->user()->id)
+                                                                @if($userChat->role == 'participant')
+                                                                <a class="dropdown-item md-1" href="/roleModerator/{{ $userChat->user->id }}/{{ $chat->id }}">
+                                                                    <i class="fa fa-lock md-1"></i>
                                                                 Предостиавить роль модератора</a>
-                                                            @else
-                                                                <a class="dropdown-item md-1" href="/roleParticipant/{{ $userChat->id }}/{{ $chat->id }}">
-                                                                    <i class="fa fa-edit md-1"></i>
+                                                            @elseif ($userChat->role == 'moderator')
+                                                                <a class="dropdown-item md-1" href="/roleParticipant/{{ $userChat->user->id }}/{{ $chat->id }}">
+                                                                    <i class="fa fa-lock md-1"></i>
                                                                 Предостиавить роль пользователя</a>
                                                             @endif 
                                                         @endif
-                                                        <a class="dropdown-item md-1" href="/deleteUsersIsChat/{{ $userChat->id }}/{{ $chat->chat_id }}" onclick="return confirm('are you sure?');">
-                                                            <i class="fa fa-edit md-1"></i>
+                                                        <a class="dropdown-item md-1" href="/deleteUsersIsChat/{{ $userChat->user->id }}/{{ $chat->id }}" onclick="return confirm('are you sure?');">
+                                                            <i class="fa fa-window md-1"></i>
                                                         Удалить пользователя из чата</a>
                                                     @endif           
                                                 </div>
@@ -216,13 +213,13 @@
                             <h4><span class="text-truncate text-truncate-xl">Выберите и добавьте пользователя  в чат</span></h4>
                             <div class="row" id="js-contacts">
                                 
-                                @foreach ($users as $user)
+                                @foreach ($usersNotChat as $user)
                                 @if(auth()->user()->admin || auth()->user()->id == $chat->user_id)
                                 <div class="col-xl-4">
                                     <div id="c_1" class="card border shadow-0 mb-g shadow-sm-hover" data-filter-tags="">
                                         <div class="card-body border-faded border-top-0 border-left-0 border-right-0 rounded-top">
                                             <div class="d-flex flex-row align-items-center">
-                                                    <span class="rounded-circle profile-image d-block" style="background-image:url('{{ $user->avatar}}'); background-size: cover;"></span>
+                                                    <span class="rounded-circle profile-image d-block" style="background-image:url('{{ asset($user->info->avatar)}}'); background-size: cover;"></span>
                                                 </span>
                                                 <div class="info-card-text flex-1 md-1">
                                                     <a href="javascript:void(0);" class="fs-xl text-truncate text-truncate-lg text-info" data-toggle="dropdown" aria-expanded="false">
@@ -270,8 +267,8 @@
     </form>
     </div>
 </main>
-<script src="js/vendors.bundle.js"></script>
-    <script src="js/app.bundle.js"></script>
+<script src="{{ asset('js/vendors.bundle.js') }}"></script>
+    <script src="{{ asset('js/app.bundle.js') }}"></script>
     <script>
 
         $(document).ready(function()
@@ -283,8 +280,8 @@
 @endsection
 
 @section('script')
-<script src="js/vendors.bundle.js"></script>
-    <script src="js/app.bundle.js"></script>
+<script src="{{ asset('js/vendors.bundle.js') }}"></script>
+    <script src="{{ asset('js/app.bundle.js') }}"></script>
     <script>
 
         $(document).ready(function()

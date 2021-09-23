@@ -11,19 +11,19 @@
 @endsection
 
 @section('style')
-    <link id="vendorsbundle" rel="stylesheet" media="screen, print" href="css/vendors.bundle.css">
-    <link id="appbundle" rel="stylesheet" media="screen, print" href="css/app.bundle.css">
-    <link id="myskin" rel="stylesheet" media="screen, print" href="css/skins/skin-master.css">
-    <link rel="stylesheet" media="screen, print" href="css/fa-solid.css">
-    <link rel="stylesheet" media="screen, print" href="css/fa-brands.css">
-    <link rel="stylesheet" media="screen, print" href="css/fa-regular.css">   
+    <link id="vendorsbundle" rel="stylesheet" media="screen, print" href="{{ asset('css/vendors.bundle.css') }}">
+    <link id="appbundle" rel="stylesheet" media="screen, print" href="{{ asset('css/app.bundle.css') }}">
+    <link id="myskin" rel="stylesheet" media="screen, print" href="{{ asset('ss/skins/skin-master.css') }}c">
+    <link rel="stylesheet" media="screen, print" href="{{ asset('css/fa-solid.css') }}">
+    <link rel="stylesheet" media="screen, print" href="{{ asset('css/fa-brands.css') }}">
+    <link rel="stylesheet" media="screen, print" href="{{ asset('css/fa-regular.css') }}">   
 @endsection
 
 
 
 @section('navchat')
 <nav class="navbar navbar-expand-lg navbar-dark bg-info bg-info-gradient">
-    <a class="navbar-brand d-flex align-items-center fw-500" href="users.html"><img alt="logo" class="d-inline-block align-top mr-2" src="img/logo.png">Страница чатов</a> <button aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarColor02" data-toggle="collapse" type="button"><span class="navbar-toggler-icon"></span></button>
+    <a class="navbar-brand d-flex align-items-center fw-500" href="users.html"><img alt="logo" class="d-inline-block align-top mr-2" src="{{ asset('img/logo.png') }}">Страница чатов</a> <button aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarColor02" data-toggle="collapse" type="button"><span class="navbar-toggler-icon"></span></button>
     <div class="collapse navbar-collapse" id="navbarColor02">
         <ul class="navbar-nav md-3">
             <li class="nav-item active">
@@ -37,25 +37,26 @@
         </ul>
         <ul class="navbar-nav md-3">
             <li class="nav-item active">
-                <a class="nav-link " href="/editChatShow/{{ $chat->id }}" >Редактировать чат <span class="sr-only">(current)</span></a>
+                <a class="nav-link " href="/editChatShow/{{ $chat->id }}" >Редактировать <span class="sr-only">(current)</span></a>
             </li>
         </ul>    
         <ul class="navbar-nav md-3">
             <li class="nav-item active">
-                <a class="nav-link " href="/deleteChat/{{ $chat->id }}" onclick="return confirm('are you sure?');">Удалить чат <span class="sr-only">(current)</span></a>
+                <a class="nav-link " href="/deleteChat/{{ $chat->id }}" onclick="return confirm('are you sure?');">Удалить<span class="sr-only">(current)</span></a>
             </li>
         </ul> 
         @if (auth()->user()->admin)
-            @if ($chat->banned == 1)
+            @if ($chat->banned == 0)
             <ul class="navbar-nav md-3">
                 <li class="nav-item active">
-                    <a class="nav-link " href="/offBannedChat/{{ $chat->id }}" onclick="return confirm('are you sure?');">Разблокировать чат <span class="sr-only">(current)</span></a>
+                    <a class="nav-link " href="/onBannedChat/{{ $chat->id }}" onclick="return confirm('are you sure?');">Заблокировать<span class="sr-only">(current)</span></a>
                 </li>
             </ul> 
-            @else
+            @endif
+            @if($chat->banned == 1)
             <ul class="navbar-nav md-3">
                 <li class="nav-item active">
-                    <a class="nav-link " href="/onBannedChat/{{ $chat->id }}" onclick="return confirm('are you sure?');">Разблокировать чат <span class="sr-only">(current)</span></a>
+                    <a class="nav-link " href="/offBannedChat/{{ $chat->id }}" onclick="return confirm('are you sure?');">Разблокировать<span class="sr-only">(current)</span></a>
                 </li>
             </ul> 
             @endif    
@@ -63,17 +64,11 @@
         
         <!-- информации о чате в панели навигации -->
                     <div class="d-flex flex-row align-items-center ">   
-                            <span class="rounded-circle profile-image d-block " style="background-image:url('{{ $chat->chat_avatar }}'); background-size: cover;"></span>
-                        </span>
-                        <div class="info-card-text flex-1">
-                            <a href="javascript:void(0);" class="fs-xl text-truncate text-truncate-lg text-white" data-toggle="dropdown" aria-expanded="false">
-                                {{ $chat->name_chat }}    
-                            </a>    
-                        </div>  
+                            <span class="rounded-circle profile-image d-block md-3 " style="background-image:url('{{ asset($chat->chat_avatar) }}'); background-size: cover;"></span>
                         @if ($chat->banned==1)
-                            <span class="text-truncate text-truncate-xl md-1 text-danger">Чат заблокирован</span>
+                            <span class="text-truncate text-truncate-xl md-3 text-danger">Чат заблокирован</span>
                         @else
-                            <span class="text-truncate text-truncate-xl md-1">Активный чат</span>
+                            <span class="text-truncate text-truncate-xl md-3">Активный чат</span>
                         @endif   
                     </div>
                     <ul class="navbar-nav ml-auto">
@@ -122,7 +117,7 @@
             <!-- флеш сообщения - окончание блока -->
 
             <!-- название чата  -->
-            <div class="subheader">
+            <div class="subheader">   
                 <h1 class="subheader-title">
                     <i class='subheader-icon fal fa-users'></i> {{ $chat->name_chat }} 
                 </h1>
@@ -132,10 +127,10 @@
             <form action="/message/{{ $chat->id }}" method="GET">
                                 {{ csrf_field() }}
                                 <div class="border-faded bg-faded p-3 mb-g d-flex mt-3">
-                                    <input type="text"  name="message"  placeholder="Ввести текст сообщения">
+                                    <input type="text"  name="message"  placeholder="Ввести текст сообщения" style="width: 1100px;">
                                     <div class="btn-group btn-group-lg btn-group-toggle hidden-lg-down ml-3" data-toggle="buttons">
                                     </div>
-                                    <button class="btn" type="submit" name="submit"><span class="rounded-circle profile-image d-block " style="background-image:url('/img/demo/avatars/type2.png'); background-size: cover;"></span></button>
+                                    <button class="btn btn-info" type="submit" name="submit">Отправить</button>
                                 </div>
             </form>    
 
@@ -143,26 +138,29 @@
             <!-- вывод сообщений чата -->
             <div class="row" id="js-contacts">
 
-                <!-- вывод сообщений всех  участников чата, не авторизованного пользователя--> 
+                <!-- вывод сообщений всех  участников чата,  авторизованного пользователя--> 
                 
-                @foreach ($messages as $message)
+                @foreach ($chat->messages as $message)
                 @if(auth()->user()->id != $message->user_id)
                 <div class="col-xl-4  ">
                     <div id="c_1" class="card border shadow-0 mb-g shadow-sm-hover " data-filter-tags="" style="width: 80%; margin-left: 245px;">
                         <div class="card-body border-faded border-top-0 border-left-0 border-right-0 rounded-top bg-warning bg-info-gradient" >
                             <div class="d-flex flex-row align-items-center ">
+                                
                                 <!-- статус пользователя -->
-                                @if ($message->info->status == 0)
+                                @foreach ($message->user->infos as $info)
+                                @if ($info->status == 0)
                                     <span class="status status-success mr-3">
                                 @endif
-                                @if ($message->info->status == 1)
+                                @if ($info->status == 1)
                                     <span class="status status-danger mr-3">
                                 @endif
-                                @if ($message->info->status == 2)
+                                @if ($info->status == 2)
                                     <span class="status status-warning mr-3">
                                 @endif
-                                    <span class="rounded-circle profile-image d-block " style="background-image:url('{{ $message->info->avatar }}'); background-size: cover;"></span>
+                                    <span class="rounded-circle profile-image d-block " style="background-image:url('{{ asset($info->avatar) }}'); background-size: cover;"></span>
                                 </span>
+                                @endforeach
                                 <div class="info-card-text flex-1">
                                     <a href="javascript:void(0);" class="fs-xl text-truncate text-truncate-lg text-info" data-toggle="dropdown" aria-expanded="false">
                                         {{ $message->user->name }}
@@ -193,7 +191,7 @@
             </div>
 
 
-            <!-- вывод сообщений авторизованного пользователя ( свои сообщения) -->
+            <!-- вывод сообщений  автора чата ( свои сообщения) -->
             @if(auth()->user()->id == $message->user_id)
                 
                 <div class="col-xl-4  ">
@@ -201,17 +199,19 @@
                         <div class="card-body border-faded border-top-0 border-left-0 border-right-0 rounded-top bg-blue bg-info-gradient" >
                             <div class="d-flex flex-row align-items-center ">
                                 <!-- статус пользователя -->
-                                @if ($message->info->status == 0)
+                                @foreach ($message->user->infos as $info)
+                                @if ($info->status == 0)
                                     <span class="status status-success mr-3">
                                 @endif
-                                @if ($message->info->status == 1)
+                                @if ($info->status == 1)
                                     <span class="status status-danger mr-3">
                                 @endif
-                                @if ($message->info->status == 2)
+                                @if ($info->status == 2)
                                     <span class="status status-warning mr-3">
                                 @endif
-                                    <span class="rounded-circle profile-image d-block " style="background-image:url('{{ $message->info->avatar }}'); background-size: cover;"></span>
+                                    <span class="rounded-circle profile-image d-block " style="background-image:url('{{ asset($info->avatar) }}'); background-size: cover;"></span>
                                 </span>
+                                @endforeach
                                 <div class="info-card-text flex-1">
                                     <a href="javascript:void(0);" class="fs-xl text-truncate text-truncate-lg text-info" data-toggle="dropdown" aria-expanded="false">
                                         {{ $message->user->name }}
@@ -245,8 +245,8 @@
 @endsection
 
 @section('script')
-<script src="js/vendors.bundle.js"></script>
-    <script src="js/app.bundle.js"></script>
+<script src="{{ asset('js/vendors.bundle.js') }}"></script>
+    <script src="{{ asset('js/app.bundle.js') }}"></script>
     <script>
 
         $(document).ready(function()

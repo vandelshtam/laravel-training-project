@@ -2,6 +2,9 @@
 
 namespace App\Models;
 
+use App\Models\Info;
+use App\Models\User;
+use App\Models\Social;
 use App\Models\Comment;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -20,7 +23,10 @@ class Post extends Model
         'title_post',
         'favorites',
         'postable_id',
-        'banned'
+        'banned',
+        'info_id',
+        'social_id',
+        'post_id',
     ];
 
     
@@ -30,12 +36,20 @@ class Post extends Model
     {
         return $this->morphMany(Comment::class, 'commentable');
     }
-    public function users()
+    public function user()
     {
-        return $this->hasMany(User::class);
+        return $this->belongsTo(User::class);
     }
     public function images()
     {
         return $this->morphMany(Image::class, 'imageable');
+    }
+    public function info()
+    {
+        return $this->belongsTo(Info::class);
+    }
+    public function social()
+    {
+        return $this->belongsTo(Social::class);
     }
 }

@@ -30,7 +30,7 @@
                 <a class="nav-link" href="/">Главная <span class="sr-only">(current)</span></a>
             </li>
         </ul>
-        @if($postsAll==1)
+        @if($navigate['postsAll']==1)
         <ul class="navbar-nav md-3">
             <li class="nav-item active">
                 <a class="nav-link text-danger" href="/posts" >Все посты <span class="sr-only">(current)</span></a>
@@ -43,7 +43,7 @@
             </li>
         </ul>
         @endif
-        @if ($myPosts==1)
+        @if ($navigate['myPosts']==1)
         <ul class="navbar-nav md-3">
             <li class="nav-item active">
                 <a class="nav-link text-danger" href="/myPosts" >Мои посты <span class="sr-only">(current)</span></a>
@@ -56,7 +56,7 @@
             </li>
         </ul>
         @endif
-        @if ($favorites==1)
+        @if ($navigate['favorites']==1)
         <ul class="navbar-nav md-3">
             <li class="nav-item active">
                 <a class="nav-link text-danger" href="/favoritesPosts" >Избранные посты <span class="sr-only">(current)</span></a>
@@ -69,7 +69,7 @@
             </li>
         </ul>   
         @endif
-        @if ($searchPosts==1)
+        @if ($navigate['searchPosts']==1)
         <ul class="navbar-nav md-3">
             <li class="nav-item active">
                 <a class="nav-link text-danger" href="#" >Вы в режиме поиска <span class="sr-only">(current)</span></a>
@@ -78,7 +78,7 @@
         @endif
         <ul class="navbar-nav md-3">
             <li class="nav-item active">
-                <a class="nav-link text-warning" href="/chats" >Страница чатов <span class="sr-only">(current)</span></a>
+                <a class="nav-link text-warning" href="/chats" >Перейти на страницу чатов <span class="sr-only">(current)</span></a>
             </li>
         </ul> 
         <ul class="navbar-nav ml-auto">
@@ -129,7 +129,7 @@
             <!-- флеш сообщения -->
 
             <div class="subheader">
-                @if ($searchPosts==1)
+                @if ($navigate['searchPosts']==1)
                 <h1 class="subheader-title">
                     <i class='subheader-icon fal fa-users'></i> Найденные посты
                 </h1> 
@@ -142,7 +142,7 @@
 
             <div class="row">   
                 <div class="m-auto" style="width: 77%">
-                    @if (Auth::check() && Auth::user()->admin)
+                @if (Auth::check() || Auth::user()->admin)
                     <a class="btn btn-info" href="/addPost">Добавить пост</a>
                 @endif
 
@@ -169,60 +169,7 @@
 @section('posts')
 <main id="js-page-content" role="main" class="page-content mt-3">
     @foreach ($posts as $post)
-    <!-- заблокированные посты ----   -->
-     @if($post->banned==1)   
-    <div class="subheader">
-        <h1 class="subheader-title">
-            <i class='subheader-icon fal fa-user'></i> {{ $post->name_post }}
-        </h1>
-    </div>
-    <div class="row">
-      <div class="col-lg-10 col-xl-10 m-auto">
-            <!-- управление постом  -->
-            <div class="card mb-g rounded-top">
-                <div class="row no-gutters row-grid">   
-                    <div class="col-12">   
-                        <div class="d-flex flex-column align-items-center justify-content-center p-4">   
-                                <a class="dropdown-item"  href="/post/{{ $post->id }}">
-                                    <i class="fa fa-edit btn btn-info"></i>
-                                Открыть пост</a>
-                                
-                                @if ($post->favorites==1)
-                                    <a class="dropdown-item"  href="/deleteFavorites/{{ $post->id }}">
-                                        <i class="fa fa-sun btn btn-warning"></i>Удалить из избранного</a>
-                                    
-                                @else
-                                    <a class="dropdown-item"  href="/addFavorites/{{ $post->id }}">
-                                        <i class="fa fa-sun btn btn-info"></i>Добавить в избранное</a>
-                                    
-                                 @endif 
-                                @if (Auth::user()->admin && $post->banned==1)
-                                    <a class="dropdown-item"  href="/unBannedPost/{{ $post->id }}">
-                                        <i class="fa fa-lock btn btn-warning"></i>Разблокировать пост</a>   
-                                @elseif (Auth::user()->admin)
-                                    <a class="dropdown-item"  href="/bannedPost/{{ $post->id }}">
-                                        <i class="fa fa-lock btn btn-danger"></i>Заблокировать пост</a>
-                                @endif      
-                            <br>
-                            <br>
-                            <br>    
-                            <img src="img/demo/avatars/avatar-admin-lg.png" class="rounded-circle shadow-2 img-thumbnail" alt="" style="width: 80%">
-                            <h5 class="mb-0 fw-700 text-center mt-3 btn btn-danger">
-                                Пост заблокирован из-за нарушения правил веб сайта о публикации материалов
-                                <small class="text-muted mb-0 btn btn-danger">Пост заблокирован из-за нарушения правил веб сайта о публикации материалов</small>
-                                    <hr>
-                            </h5>
-                            <h5 class="mb-0 fw-700 text-center mt-3">
-                                {{ $post->name }}
-                                <small class="text-muted mb-0">{{ $post->location }}</small>
-                            </h5>   
-                        </div>
-                    </div>   
-                </div>
-            </div>
-       </div>
-    </div>
-    @else
+    
     <!-- не заблокированные посты -->
     <div class="subheader">
         <h1 class="subheader-title">
@@ -235,47 +182,65 @@
             <div class="card mb-g rounded-top">
                 <div class="row no-gutters row-grid">   
                     <div class="col-12">   
-                        <div class="d-flex flex-column align-items-center justify-content-center p-4">   
-                                <a class="dropdown-item"  href="/post/{{ $post->id }}">
+                        <div class="d-flex flex-column align-items-center justify-content-center p-4"> 
+                            
+                            @if(Auth::check())
+                                @if($post->banned==0 || auth()->user()->admin)
+                                <a class="dropdown-item"  href="/post/{{ $post->post_id }}">
                                     <i class="fa fa-sun btn btn-info"></i>
                                 Открыть пост</a>
-                                @if ($post->favorites==1)
-                                    <a class="dropdown-item"  href="/deleteFavorites/{{ $post->id }}">
-                                        <i class="fa fa-sun btn btn-warning"></i>Удалить из избранного</a>
-                                    
-                                @else
-                                    <a class="dropdown-item"  href="/addFavorites/{{ $post->id }}">
-                                        <i class="fa fa-sun btn btn-info"></i>Добавить в избранное</a>
-                                    
+                                @endif
+                                @if ($post->banned==0 && $post->favorites==1)
+                                    <a class="dropdown-item"  href="/deleteFavorites/{{ $post->post_id }}">
+                                        <i class="fa fa-sun btn btn-warning"></i>Удалить из избранного</a>    
+                                @endif
+                                @if($post->banned==0 && $post->favorites==0)
+                                    <a class="dropdown-item"  href="/addFavorites/{{ $post->post_id}}">
+                                        <i class="fa fa-sun btn btn-info"></i>Добавить в избранное</a>    
                                  @endif 
-                                 @if (Auth::user()->admin && $post->banned==1)
-                                    <a class="dropdown-item"  href="/unBannedPost/{{ $post->id }}">
+                                 @if ($post->banned==1 && auth()->user()->admin)
+                                    <a class="dropdown-item"  href="/unBannedPost/{{ $post->post_id }}">
                                         <i class="fa fa-sun btn btn-warning"></i>Разблокировать пост</a>   
-                                @elseif (Auth::user()->admin)
-                                    <a class="dropdown-item"  href="/bannedPost/{{ $post->id }}">
+                                @endif
+                                @if($post->banned==0 && auth()->user()->admin) 
+                                    <a class="dropdown-item"  href="/bannedPost/{{ $post->post_id }}">
                                         <i class="fa fa-sun btn btn-danger"></i>Заблокировать пост</a>
-                                @endif      
+                                @endif 
+                            @endif   
                             <br>
                             <br>
-                            <br>    
-                            <img src="{{ $post->avatar_post }}" class="rounded-circle shadow-2 img-thumbnail" alt="" style="width: 80%">
+                            <br> 
+                            @if($post->banned == 1)
+                            <img src="{{ asset('img/demo/avatars/type2.png') }}" class="rounded-circle shadow-2 img-thumbnail" alt=""">
+                            @else
+                            <img src="{{ $post->avatar_post }}" class="rounded-circle shadow-2 img-thumbnail" alt=""">
+                            @endif
                             <h5 class="mb-0 fw-700 text-center mt-3">
+                                @if($post->banned == 1)
+                                <h5 class="mb-0 fw-700 text-center mt-3 btn btn-danger">
+                                    Пост заблокирован из-за нарушения правил веб сайта о публикации материалов
+                                    <small class="text-muted mb-0 btn btn-danger">Пост заблокирован из-за нарушения правил веб сайта о публикации материалов</small>
+                                        <hr>
+                                </h5>
+                                @else
                                 {{ $post->title_post }}
                                 <small class="text-muted mb-0">{{ $post->text }}</small>
                                     <hr>
-                            </h5>
-                            <h5 class="mb-0 fw-700 text-center mt-3">
-                                {{ $post->name }}
-                                <small class="text-muted mb-0">{{ $post->location }}</small>
-                            </h5>    
+                                </h5>
+                                <h5 class="mb-0 fw-700 text-center mt-3">
+                                    {{ $post->user->name }}
+                                    <small class="text-muted mb-0">{{ $post->user->info->location }}</small>
+                            </h5> 
+                                @endif   
                         </div>
                     </div>   
                 </div>
             </div>
        </div>
     </div>
-    @endif
+    
     @endforeach
+</main>
 <script src="js/vendors.bundle.js"></script>
     <script src="js/app.bundle.js"></script>
     <script>
