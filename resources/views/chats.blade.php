@@ -198,12 +198,7 @@
                                         
                                         @if (auth()->user()->admin  
                                         || (auth()->user()->id == $chat->author_user_id && ($chat->banned !=1)) 
-                                        || DB::table('userlists')
-                                        ->where('chat_id', $chat->id)
-                                        ->where('user_id', auth()->user()->id)
-                                        ->select('*')
-                                        ->first()
-                                        ->role == 'moderator')
+                                        || DB::table('userlists')->where('chat_id', $chat->id)->where('user_id', auth()->user()->id)->select('*')->first()->role == 'moderator')
                                         <a href="/editChatShow/{{ $chat->id }}" class="dropdown-item" >
                                             <i class="fa fa-window-close"></i>
                                         Редактировать чат
@@ -222,12 +217,7 @@
                                         @endif 
                                         @if (auth()->user()->admin
                                           || (auth()->user()->id == $chat->author_user_id && ($chat->banned !=1))
-                                          || DB::table('userlists')
-                                            ->where('chat_id', $chat->id)
-                                            ->where('user_id', auth()->user()->id)
-                                            ->select('*')
-                                            ->first()
-                                            ->role == 'moderator')  
+                                          || DB::table('userlists')->where('chat_id', $chat->id)->where('user_id', auth()->user()->id)->select('*')->first()->role == 'moderator')  
                                         <a href="/deleteChat/{{ $chat->id }}" class="dropdown-item" onclick="return confirm('are you sure?');">
                                             <i class="fa fa-window-close"></i>
                                         Удалить чат</a>
@@ -240,13 +230,13 @@
                                     @endif
                                     <span class="text-truncate text-truncate-xl">{{ $chat->location }}</span>
                                 </div>
-                                    <span class="text-truncate text-truncate-xl md-3">Автор чата - {{ App\Models\User::find($chat->author_user_id)->name }} </span>
-                                    <span class="text-truncate text-truncate-xl">*</span>
+                                    <span class="text-truncate text-truncate-xl">Автор чата - {{ App\Models\User::find($chat->author_user_id)->name }} </span>
+                                    
                                 @if ($chat->banned==1)
-                                    <span class="text-truncate text-truncate-xl md-3">Чат заблокирован</span>
+                                    <span class="text-truncate text-truncate-xl ml-3 bt btn-danger">Чат заблокирован</span>
                                     
                                 @else
-                                    <span class="text-truncate text-truncate-xl md-3">Активный чат</span>
+                                    <span class="text-truncate text-truncate-xl ml-3 bt btn-success">Активный чат</span>
                                 @endif
                                 <button class="js-expand-btn btn btn-sm btn-default d-none" data-toggle="collapse" data-target="#c_1 > .card-body + .card-body" aria-expanded="false">
                                     <span class="collapsed-hidden">+</span>

@@ -64,13 +64,15 @@
         
         <!-- информации о чате в панели навигации -->
                     <div class="d-flex flex-row align-items-center ">   
-                            <span class="rounded-circle profile-image d-block md-3 " style="background-image:url('{{ asset($chat->chat_avatar) }}'); background-size: cover;"></span>
-                        @if ($chat->banned==1)
-                            <span class="text-truncate text-truncate-xl md-3 text-danger">Чат заблокирован</span>
-                        @else
-                            <span class="text-truncate text-truncate-xl md-3">Активный чат</span>
-                        @endif   
+                            <span class="rounded-circle profile-image d-block md-3 " style="background-image:url('{{ asset($chat->chat_avatar) }}'); background-size: cover;"></span>   
                     </div>
+                    <div class="d-flex flex-row align-items-center ml-2">      
+                    @if ($chat->banned==1)
+                        <span class="text-truncate text-truncate-xl  text-danger">Чат заблокирован</span>
+                    @else
+                        <span class="text-truncate text-truncate-xl ">Активный чат</span>
+                    @endif   
+                </div>
                     <ul class="navbar-nav ml-auto">
                         @if(Auth::check() && Auth::user()->admin)
                         <li class="nav-item">
@@ -138,12 +140,12 @@
             <!-- вывод сообщений чата -->
             <div class="row" id="js-contacts">
 
-                <!-- вывод сообщений всех  участников чата,  авторизованного пользователя--> 
+                <!-- вывод сообщений   участников чата --> 
                 
                 @foreach ($chat->messages as $message)
                 @if(auth()->user()->id != $message->user_id)
                 <div class="col-xl-4  ">
-                    <div id="c_1" class="card border shadow-0 mb-g shadow-sm-hover " data-filter-tags="" style="width: 80%; margin-left: 245px;">
+                    <div id="c_1" class="card border shadow-0 mb-g shadow-sm-hover " data-filter-tags="" style="width: 80%; margin-left: 245px; border-radius: 10px;">
                         <div class="card-body border-faded border-top-0 border-left-0 border-right-0 rounded-top bg-warning bg-info-gradient" >
                             <div class="d-flex flex-row align-items-center ">
                                 
@@ -179,7 +181,7 @@
                                     </div>
                                     @endif
                                     <p class="text-truncate text-truncate-xl  md-5">сообщение:</p>
-                                    <span class="text-truncate text-truncate-xl  md-5" style="width: 80%; height:50px; white-space: pre-wrap;">{{ $message -> message }}</span>
+                                    <span class="text-truncate text-truncate-xl  md-5" style="width: 80%; white-space: pre-wrap;">{{ $message -> message }}</span>
                                 </div>
                                     <span class="text-truncate text-truncate-xl">{{ $message->created_at }}</span>
                             </div>
@@ -195,7 +197,7 @@
             @if(auth()->user()->id == $message->user_id)
                 
                 <div class="col-xl-4  ">
-                    <div id="c_1" class="card border shadow-0 mb-g shadow-sm-hover " data-filter-tags="" style="width: 80%;">
+                    <div id="c_1" class="card border shadow-0 mb-g shadow-sm-hover " data-filter-tags="" style="width: 80%; border-radius: 10px;">
                         <div class="card-body border-faded border-top-0 border-left-0 border-right-0 rounded-top bg-blue bg-info-gradient" >
                             <div class="d-flex flex-row align-items-center ">
                                 <!-- статус пользователя -->
@@ -230,7 +232,7 @@
                                     </div>
                                     @endif
                                     <p class="text-truncate text-truncate-xl  md-5">сообщение:</p>
-                                    <span class="text-truncate text-truncate-xl  md-5" style="width: 80%; height:50px; white-space: pre-wrap;">{{ $message -> message }}</span>
+                                    <span class="text-truncate text-truncate-xl  md-5" style="width: 80%;  white-space: pre-wrap;">{{ $message -> message }}</span>
                                 </div>
                                     <span class="text-truncate text-truncate-xl md-1">{{ $message->created_at }}</span>
                             </div>

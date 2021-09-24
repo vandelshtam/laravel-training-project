@@ -2,18 +2,19 @@
 
 namespace Database\Factories;
 
+use App\Models\Post;
 use App\Models\User;
-use App\Models\Social;
+use App\Models\Comment;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class SocialFactory extends Factory
+class CommentFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Social::class;
+    protected $model = Comment::class;
 
     /**
      * Define the model's default state.
@@ -23,10 +24,13 @@ class SocialFactory extends Factory
     public function definition()
     {
         return [
-            'telegram' => $this->faker->text(15),
-            'instagram' => $this->faker->text(15),
-            'vk' => $this->faker->text(15),
+            'comment' => $this->faker->text(56),
             'user_id' => User::factory()->create(),
+            'chat_avatar' => 'img/demo/avatars/type2.png',
+            'commentable_id' => Post::factory()->create(),
+            'commentable_type' => 'App\Models\Post',
+            'post_id' => Post::factory()->create(),
+            'banned' => 0,
         ];
     }
 }

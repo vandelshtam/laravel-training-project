@@ -2,20 +2,20 @@
 
 namespace Database\Factories;
 
+use App\Models\Chat;
 use App\Models\Info;
-use App\Models\Post;
 use App\Models\User;
-use App\Models\Social;
+use App\Models\Message;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-class PostFactory extends Factory
+class MessageFactory extends Factory
 {
     /**
      * The name of the factory's corresponding model.
      *
      * @var string
      */
-    protected $model = Post::class;
+    protected $model = Message::class;
 
     /**
      * Define the model's default state.
@@ -25,16 +25,14 @@ class PostFactory extends Factory
     public function definition()
     {
         return [
-            'name_post' => $this->faker->text(14),
-            'title_post' => $this->faker->text(28),
-            'text' => $this->faker->text(56),
-            'favorites' => 0,
-            'banned' => 0,
+            'message' => $this->faker->text(56),
+            'name' => $this->faker->text(14),
             'user_id' => User::factory()->create(),
-            'avatar_post' => 'img/demo/avatars/type2.png',
+            'chat_avatar' => 'img/demo/avatars/type2.png',
             'info_id' => Info::factory()->create(),
-            'social_id' => Social::factory()->create(),
-            'postable_id' => User::factory()->create(),
+            'messageable_id' => Chat::factory()->create(),
+            'messageable_type' => 'App\Models\Chat',
+            'chat_id' => Chat::factory()->create(),
         ];
     }
 }

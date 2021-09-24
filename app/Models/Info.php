@@ -33,6 +33,7 @@ class Info extends Model
     {
         return $this->belongsTo(User::class);
     }
+
     public function messages()
     {
         return $this->morphMany(Message::class, 'messageable');
@@ -42,10 +43,12 @@ class Info extends Model
     {
         return $this->morphMany(Userlist::class, 'userlistable');
     }
+
     public function posts()
     {
         return $this->hasMany(Post::class);
     }
+    
     public function users()
     {
         return $this->hasMany(User::class);

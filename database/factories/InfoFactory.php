@@ -25,13 +25,16 @@ class InfoFactory extends Factory
     public function definition()
     {
         return [
-            'occupation' => $this->faker->text(25),
-            'location' => $this->faker->text(25),
-            'position' => $this->faker->text(25),
-            'phone' => '+05 333 66 88',
+            'occupation' => $this->faker->text(14),
+            'location' => $this->faker->text(14),
+            'position' => $this->faker->text(16),
+            'phone' => '+052 333 66 88',
             'status' => 0,
             'user_id' => User::factory()->create(),
-            'avatar' => 'img/demo/avatars/avatar-m.png',   
+            'avatar' => 'img/demo/avatars/type2.png',
+            'infosable_id' => User::factory()->create(),
+
         ];
     }
 }
+

@@ -22,10 +22,6 @@ class CreateImagesTable extends Migration
             $table->integer('imageable_id');
             $table->string('imageable_type');
             $table->integer('chat_id');
-            $table->integer('info_id');
-            $table->string('location');
-            $table->string('favorites');
-            $table->string('name');
         });
     }
 

@@ -7,6 +7,7 @@ use App\Models\Info;
 use App\Models\User;
 use App\Models\Message;
 use App\Models\Userlist;
+use Database\Factories\ChatFactory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -262,12 +263,8 @@ class ChatsController extends Controller
 
 
 
-    
-
-
     //страница  чата
     public function openChat($chat_id){
-        
         $flash_message_success = session('flash_message_success');
         $flash_message_danger = session('flash_message_danger');
         

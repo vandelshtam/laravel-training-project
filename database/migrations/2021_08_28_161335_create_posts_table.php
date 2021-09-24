@@ -22,7 +22,11 @@ class CreatePostsTable extends Migration
             $table->string('avatar_post');
             $table->string('title_post')->unique();
             $table->integer('favorites');
+            $table->integer('postable_id');
             $table->integer('banned');
+            $table->integer('post_id');
+            $table->integer('info_id');
+            $table->integer('social_id');
         });
     }
 
