@@ -22,6 +22,8 @@ class CreateUsersTable extends Migration
             $table->integer('admin')->nullable();
             $table->rememberToken();
             $table->timestamps();
+            $table->integer('info_id')->nullable();
+            $table->integer('social_id')->nullable();
         });
     }
 
