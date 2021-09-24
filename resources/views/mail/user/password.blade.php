@@ -4,7 +4,10 @@
 The body of your message.
 
 @component('mail::button', ['url' => ''])
-Button Text
+Поздравляем, вы успешно зарегестрированы!
+
+Ваш login {{ $login }}
+
 @endcomponent
 
 Thanks,<br>

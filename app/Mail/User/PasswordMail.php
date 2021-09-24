@@ -1,24 +1,26 @@
 <?php
 
-namespace App\Mail;
+namespace App\Mail\User;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class Feedback extends Mailable
+class PasswordMail extends Mailable
 {
     use Queueable, SerializesModels;
+
+    public $login;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($login)
     {
-        //
+        $this->login = $login;
     }
 
     /**
@@ -28,6 +30,6 @@ class Feedback extends Mailable
      */
     public function build()
     {
-        return $this->from('noreply@training.ru')->markdown('emails.feedback');
+        return $this->markdown('mail.user.password');
     }
 }

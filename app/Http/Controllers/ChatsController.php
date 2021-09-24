@@ -238,10 +238,10 @@ class ChatsController extends Controller
             //'chat_avatar' => $this->request->file('avatar_chat')->store('uploads'),
             'location' => User::find(auth()->user()->id)->info->location,
         ]);
-
+//dd($id_new_chat);
         //запись аватара в таблицу чатов  если он добавлен в форму
         if($this->request->file('avatar_chat')){
-            DB::table('chats')->where('id', $id_new_chat)->update([
+            Chat::where('id', $id_new_chat)->update([
                 'chat_avatar' => $this->request->file('avatar_chat')->store('uploads')   
         ]);
         }
@@ -255,7 +255,7 @@ class ChatsController extends Controller
         
         //запись в таблицу 'userlusts' информации о чате и  о пользователях и авторе участвующих в чате
         DB::table('userlists')->insert($arrey_db);
-        DB::table('userlists')->insert(['user_id' => $author_user_id, 'info_id' => $author_user_id, 'chat_id' => $id_new_chat,'userlistable_id' => $id_new_chat, 'userlistable_type' => 'App\Models\Chat','name' => $this->request->name_chat, 'role' => 'author']);
+        Userlist::create(['user_id' => $author_user_id, 'info_id' => $author_user_id, 'chat_id' => $id_new_chat,'userlistable_id' => $id_new_chat, 'userlistable_type' => 'App\Models\Chat','name' => $this->request->name_chat, 'role' => 'author']);
          
         $this->request->session()->flash('flash_message_success','Вы успешно создали новый чат!');
         return redirect('/openChat/'.$id_new_chat.'');

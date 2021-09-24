@@ -1,12 +1,15 @@
 <?php
 
 use App\Models\User;
-use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChatsController;
 use App\Http\Controllers\PostsController;
 use App\Http\Controllers\UsersController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 
 
 /*
@@ -32,7 +35,7 @@ Route::middleware('guest')->group(function(){
     Route::post('/register', [AuthController::class, 'registerNewUser']);
 });
 
-Route::middleware('auth')->group(function(){
+Route::middleware('auth', 'verified')->group(function(){
 Route::get('/profile/{id?}', [UsersController::class, 'user_profile']);
 Route::get('/status/{id?}', [UsersController::class, 'status']);
 Route::post('/status/{id?}', [UsersController::class, 'statusUser']);
@@ -89,8 +92,14 @@ Route::post('/addNewComment/{post_id?}', [PostsController::class, 'addNewComment
 Route::post('/downloadImage/{post_id?}/{user_id}', [PostsController::class, 'downloadImage']);
 Route::post('/changeAvatar/{post_id?}', [PostsController::class, 'changeAvatar']);
 Route::post('/editInsertPost/{post_id?}', [PostsController::class, 'editInsertPost']);
+Route::get('/email/verify', [AuthController::class, 'verify_email']);
 });
 
+//Route::get('/email/verify', function () {
+    //return view('verify_email');
+//})->middleware('auth')->name('verification.notice');
+
+//Auth::routes(['verify' => true]);
 Route::middleware('admin')->group(function(){
 Route::get('/create', [UsersController::class, 'create']);
 Route::post('/create', [UsersController::class, 'createUser']);
@@ -104,6 +113,24 @@ Route::get('/deleteComment/{comment_id?}/{post_id?}', [PostsController::class, '
 Route::get('/onBannedChat/{chat_id}', [ChatsController::class, 'onBannedChat']);
 Route::get('/offBannedChat/{chat_id}', [ChatsController::class, 'offBannedChat']);
 });
+
+//Route::get('/email/verify', function () {
+//    return view('auth.verify_email',);
+//})->middleware('auth')->name('verification.notice');
+
+Route::get('/email/verification-notification', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+
+    return back()->with('message', 'Verification link sent!');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
+
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+
+    return redirect('/');
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
+//Route::get('/verify', [AuthController::class, 'verify_email']);
 
 Route::fallback(function() {
     abort(404);

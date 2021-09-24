@@ -10,10 +10,12 @@ use App\Models\Social;
 
 use App\Mail\OrderShipped;
 use Illuminate\Http\Request;
+use App\Mail\User\PasswordMail;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Foundation\Bus\DispatchesJobs;
@@ -79,19 +81,33 @@ class AuthController extends BaseController
               ->where('id', $id)
               ->update(['info_id' => $userInfos_id,
                         'social_id' => $userSocials_id]);
+
+        $user = User::find($id);
         
         //сообщение об успешной регистрации нового пользователя
         if($id == true && $userInfos_id == true && $userSocials_id == true){
-        
-            //Mail::to('mvlju977@gmail.com')->send(new Feedback());
-            $this->request->session()->flash('flash_message_success','Вы успешно зарегестрированы, пожалуйста авторизуйтесь!!!');
+            event(new Registered($user));
+            $login = $this->request->email;
+            Mail::to($user->email)->send(new PasswordMail($login));
+            $this->request->session()->flash('flash_message_success','Вы успешно зарегестрированы, пожалуйста подтвердите  email!!!');
+            //$flash_message_success = session('flash_message_success');
+            //return redirect()->route('verification.notice');
+            //return redirect('/email/verify');
+            //auth()->login($user);
+            $this->request->session()->flash('flash_message_success','Вы успешно зарегестрированы, вам отправлено письмо об успешной регистрации и письмо для подтверждения электронной почты, пожалуйста авторизуйтесь и подтвердите почту!');
+            $flash_message_success = session('flash_message_success');
             return redirect('login');
+           // return redirect('/');
         }
-        else{
+        
+        
+        if(!$user){
             $this->request->session()->flash('flash_message_danger','Данные не сохранились, попробуйте еще раз, приносим извинения.');
             $flash_message_danger = session('flash_message_danger');
             return view('register', ['flash_message_danger' => $flash_message_danger]);
         }
+
+       // Mail::to($user->email)->send(new VerifyEmail($user));
     }
 
 
@@ -121,6 +137,13 @@ class AuthController extends BaseController
             $remember = true;
         } else {
             $remember = false;
+        }
+
+
+        if (Auth::attempt($credentials, $remember) ) {
+            $this->request->session()->regenerate();
+            $this->request->session()->flash('flash_message_success','Вы успешно авторизованы!');
+            return redirect()->intended('/');
         }
 
         if (Auth::attempt($credentials, $remember)) {
@@ -259,6 +282,11 @@ class AuthController extends BaseController
 
         $this->request->session()->flash('flash_message_success','Вы успешно изменили данные безопасности!');
         return redirect()->intended('/');       
-        }    
+        } 
         
+       public function verify_email(){
+            $this->request->session()->flash('flash_message_success','Пожалуйста подтвердите почту');
+            $flash_message_success = session('flash_message_success');
+            return view('verify_email', ['flash_message_success' => $flash_message_success]);
+      }
 }

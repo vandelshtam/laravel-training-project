@@ -20,11 +20,11 @@ class CreatePostsTable extends Migration
             $table->string('text');
             $table->string('name_post');
             $table->string('avatar_post');
-            $table->string('title_post')->unique();
-            $table->integer('favorites');
+            $table->string('title_post');
+            $table->integer('favorites')->nullable();
             $table->integer('postable_id');
-            $table->integer('banned');
-            $table->integer('post_id');
+            $table->integer('banned')->nullable();
+            $table->integer('post_id')->nullable();
             $table->integer('info_id');
             $table->integer('social_id');
         });

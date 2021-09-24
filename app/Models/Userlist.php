@@ -19,6 +19,8 @@ class Userlist extends Model
         'chat_id',
         'role',
         'user_id',
+        'userlistable_id',
+        'userlistable_type',
     ];
 
     public function userlistable()

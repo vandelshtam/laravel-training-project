@@ -19,12 +19,12 @@ class CreateUserlistsTable extends Migration
             $table->integer('info_id');
             $table->integer('user_id');
             $table->integer('chat_id');
-            $table->integer('imageable_id');
-            $table->string('imageable_type');
-            $table->integer('status_chat');
+            $table->integer('userlistable_id');
+            $table->string('userlistable_type');
+            $table->integer('status_chat')->nullable();
             $table->string('name');
-            $table->integer('favorites');
-            $table->string('role');
+            $table->integer('favorites')->nullable();
+            $table->string('role', 'participant');
         });
     }
 

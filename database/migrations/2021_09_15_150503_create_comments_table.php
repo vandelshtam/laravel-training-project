@@ -21,7 +21,7 @@ class CreateCommentsTable extends Migration
             $table->integer('post_id');
             $table->string('commentable_type');
             $table->integer('commentable_id');
-            $table->integer('banned');
+            $table->integer('banned')->nullable();
         });
     }
 

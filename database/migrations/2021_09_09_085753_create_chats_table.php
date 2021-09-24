@@ -17,16 +17,16 @@ class CreateChatsTable extends Migration
             $table->id();
             $table->timestamps();
             $table->integer('author_user_id');
-            $table->string('name_chat')->unique();
-            $table->integer('status_chat');
-            $table->string('chat_avatar');
-            $table->string('location');
-            $table->string('favorites');
+            $table->string('name_chat');
+            $table->integer('status_chat')->nullable();
+            $table->string('chat_avatar', 'img/demo/avatars/avatar-f.png');
+            $table->string('location')->nullable();
+            $table->string('favorites')->nullable();
             $table->string('name');
             $table->integer('user_id');
-            $table->integer('chat_id');
+            $table->integer('chat_id')->nullable();
             $table->integer('banned')->nullable();
-            $table->string('role');
+            $table->string('role', 'author');
         });
     }
 
