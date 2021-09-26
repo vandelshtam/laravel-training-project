@@ -33,7 +33,7 @@ class AppServiceProvider extends ServiceProvider
         VerifyEmail::toMailUsing(function ($notifiable, $url) {
             return (new MailMessage)
                 ->subject('Подтверждение електронной почты')
-                ->line('Нажмите для подтверждения')
+                ->line('Нажмите для подтверждения, для перехода по данной ссылке')
                 ->action('Подтвердить', $url);
         });
     }

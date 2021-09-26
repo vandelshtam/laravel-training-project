@@ -55,59 +55,50 @@ class AuthController extends BaseController
                 'password' => 'required|min:6|max:16']
         );
         //запись нового пользователя в БД: таблицы users,User_infos,user_socials
-        $id = DB::table('users')->insertGetId([
+        $user = User::create([
             'name' => $this->request->name,
             'email' => $this->request->email,
             'password' => Hash::make($this->request->password)
         ]);
-        $userInfos_id = DB::table('infos')->insertGetId([
+        $info = Info::create([
             'occupation' => '',
             'location' => '',
             'position' => '',
             'phone' => '',
             'avatar' => 'img/demo/avatars/avatar-m.png',
-            'user_id' => $id,
-            'infosable_id' => $id,
+            'user_id' => $user->id,
+            'infosable_id' => $user->id,
 
         ]);
-        $userSocials_id = DB::table('socials')->insertGetId([
+        
+        $social = Social::create([
             'telegram' => '',
             'instagram' => '',
             'vk' => '',
-            'user_id' => $id
+            'user_id' => $user->id
         ]);
 
-        DB::table('users')
-              ->where('id', $id)
-              ->update(['info_id' => $userInfos_id,
-                        'social_id' => $userSocials_id]);
+        User::where('id', $user->id)
+              ->update(['info_id' => $info->id,
+                        'social_id' => $social->id]);
 
-        $user = User::find($id);
         
         //сообщение об успешной регистрации нового пользователя
-        if($id == true && $userInfos_id == true && $userSocials_id == true){
+        if($user && $info && $social){
             event(new Registered($user));
             $login = $this->request->email;
             Mail::to($user->email)->send(new PasswordMail($login));
-            $this->request->session()->flash('flash_message_success','Вы успешно зарегестрированы, пожалуйста подтвердите  email!!!');
-            //$flash_message_success = session('flash_message_success');
-            //return redirect()->route('verification.notice');
-            //return redirect('/email/verify');
-            //auth()->login($user);
+
             $this->request->session()->flash('flash_message_success','Вы успешно зарегестрированы, вам отправлено письмо об успешной регистрации и письмо для подтверждения электронной почты, пожалуйста авторизуйтесь и подтвердите почту!');
             $flash_message_success = session('flash_message_success');
             return redirect('login');
-           // return redirect('/');
         }
-        
-        
+          
         if(!$user){
             $this->request->session()->flash('flash_message_danger','Данные не сохранились, попробуйте еще раз, приносим извинения.');
             $flash_message_danger = session('flash_message_danger');
             return view('register', ['flash_message_danger' => $flash_message_danger]);
         }
-
-       // Mail::to($user->email)->send(new VerifyEmail($user));
     }
 
 
@@ -138,7 +129,6 @@ class AuthController extends BaseController
         } else {
             $remember = false;
         }
-
 
         if (Auth::attempt($credentials, $remember) ) {
             $this->request->session()->regenerate();
@@ -227,7 +217,7 @@ class AuthController extends BaseController
         }
 
         //получение данных пользователя 
-        $user = DB::table('users')->where('id', $id)->get();
+        $user = User::find($id)->get();
         
         return view('security', ['user' => $user[0], 'id' => $id, 'flash_message_success' => $flash_message_success, 'flash_message_danger' => $flash_message_danger]);
     }
@@ -249,7 +239,7 @@ class AuthController extends BaseController
         }
 
         //текущий  email
-        $email = DB::table('users')->where('id','=', $id)->first()->email;
+        $email = User::find($id)->email;
         
         if($email != $this->request->new_email && $this->request->new_email != null){
             //если почта изменена проводим ее валидацию
@@ -263,13 +253,11 @@ class AuthController extends BaseController
             ]);
         
         if($this->request->new_email == null){
-            $result_security = DB::table('users')
-            ->where('id', $id)
+            $result_security = User::where('id', $id)
             ->update(['password' => Hash::make($this->request->password)]);
         }
         else{
-            $result_security = DB::table('users')
-              ->where('id', $id)
+            $result_security = User::where('id', $id)
               ->update(['email' => $this->request->new_email, 'password' => Hash::make($this->request->password)]);
 
         }
@@ -283,10 +271,5 @@ class AuthController extends BaseController
         $this->request->session()->flash('flash_message_success','Вы успешно изменили данные безопасности!');
         return redirect()->intended('/');       
         } 
-        
-       public function verify_email(){
-            $this->request->session()->flash('flash_message_success','Пожалуйста подтвердите почту');
-            $flash_message_success = session('flash_message_success');
-            return view('verify_email', ['flash_message_success' => $flash_message_success]);
-      }
+       
 }

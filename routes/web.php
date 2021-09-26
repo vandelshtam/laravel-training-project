@@ -92,12 +92,12 @@ Route::post('/addNewComment/{post_id?}', [PostsController::class, 'addNewComment
 Route::post('/downloadImage/{post_id?}/{user_id}', [PostsController::class, 'downloadImage']);
 Route::post('/changeAvatar/{post_id?}', [PostsController::class, 'changeAvatar']);
 Route::post('/editInsertPost/{post_id?}', [PostsController::class, 'editInsertPost']);
-Route::get('/email/verify', [AuthController::class, 'verify_email']);
+//Route::get('/email/verify', [AuthController::class, 'verify_email']);
 });
 
-//Route::get('/email/verify', function () {
-    //return view('verify_email');
-//})->middleware('auth')->name('verification.notice');
+Route::get('/email/verify', function () {
+    return view('verify_email');
+})->middleware('auth')->name('verification.notice');
 
 //Auth::routes(['verify' => true]);
 Route::middleware('admin')->group(function(){

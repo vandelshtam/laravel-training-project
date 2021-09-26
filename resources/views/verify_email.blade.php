@@ -38,11 +38,8 @@
         </div>
         <div class="card p-4 border-top-left-radius-0 border-top-right-radius-0">
             <!--флеш сообщения-->
-            @if($flash_message_success)
-            <div class="alert alert-success">
-            {{ $flash_message_success }}       
-            </div>
-            @endif
+            
+            
             <!--флеш сообщения-->
 
             <!-- сообщения об ошибках-->
@@ -57,19 +54,11 @@
             </div>
             @endif
             <!-- сообщения об ошибках-->
-            <form action="" method="POST">
-                {{ csrf_field() }}
-                <div class="form-group">
-                    <label class="form-label" for="password">Подтвердить email</label>
-                    <!--<input type="password" id="password" class="form-control" name="confirm" placeholder="" >-->
-                </div>
-                <button type="submit" name="submit" class="btn btn-default float-right">Подтвердить</button>
-            </form>
+            
             <form action="" method="GET">
                 {{ csrf_field() }}
                 <div class="form-group">
-                    <label class="form-label" for="password">Отправить повторно</label>
-                    <!--<input type="password" id="password" class="form-control" name="confirm" placeholder="" >-->
+                    <small>Отправить ссылку для подтверждения электронной почты и регистрации. Нажмите отправить, далее откройте почту и перейдите по отправленной ссылке.</small> 
                 </div>
                 <a type="submit" href="{{ route('verification.send') }}" name="submit" class="btn btn-default float-right">Отправить</a>
             </form>
