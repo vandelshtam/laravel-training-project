@@ -107,7 +107,7 @@
     <div class="row ">
     <form action="/changeAvatar/{{ $post->id }}" method="POST" enctype="multipart/form-data" class="col-lg-12 col-xl-12 m-auto">
         {{ csrf_field() }}
-      <div class="col-lg-12 col-xl-12 m-auto">
+        <div class="col-lg-12 col-xl-12 m-auto">
             <!-- пост -->
             <div class="card mb-g rounded-top">
                 <div class="row no-gutters row-grid">    
@@ -124,7 +124,7 @@
 
                             <!-- аватар поста -->    
                             <h2 align="center">Аватар поста</h2>
-                            <img src="{{ asset($post->avatar_post) }}" class="rounded-circle shadow-2 img-thumbnail" alt="" style="width: 80%">
+                            <img src="{{ asset($post->avatar_post) }}" class="rounded-circle shadow-2 img-thumbnail col-lg-10 col-xl-10" alt="" >
                             <div class="panel-container col-lg-12 col-xl-12 m-auto" >
                                 <div class="panel-hdr">
                                     <h2>Текущий аватар</h2>
@@ -134,8 +134,8 @@
                                         <label class="form-label" for="example-fileinput">Выберите аватар</label>
                                         <input type="file" id="example-fileinput" class="form-control-file" name="avatar_post">
                                     </div>    
-                                    <div class="col-md-12 mt-3 d-flex flex-row-reverse">   
-                                        <button class="btn btn-warning" type="submit" name="submit">Загрузить аватар поста</button>
+                                    <div class="col-lg-11 col-xl-11 m-auto d-flex flex-row-reverse">   
+                                        <button class="btn btn-warning" type="submit" name="submit">Загрузить аватар</button>
                                     </div>
                                 </div>
                             </div>
@@ -159,7 +159,7 @@
                             </div>
                             <div class="panel-container col-lg-12 col-xl-12 m-auto" >
                                 <div class="panel-hdr">
-                                    <h2>Текущие фотографии</h2>
+                                    <h2>Текущие фотографии в галерее</h2>
                                 </div>
                                 <div class="panel-content" >  
                                     <form action="/downloadImage/{{ $post->id }}/{{ auth()->user()->id }}" method="POST" enctype="multipart/form-data" class="col-lg-12 col-xl-12 m-auto"> 
@@ -169,7 +169,7 @@
                                         <input type="file" id="example-fileinput" class="form-control-file" name="image">
                                     </div>
                                     <div class="col-md-12 mt-3 d-flex flex-row-reverse">
-                                        <button class="btn btn-warning" type="submit" name="submit_image">Загрузить фотографии поста</button>
+                                        <button class="btn btn-warning" type="submit" name="submit_image">Загрузить фотографии</button>
                                     </div>
                                     </form>
                                 </div>
@@ -196,16 +196,14 @@
                                 <label class="form-label" for="simpleinput">Введите текст поста</label>
                                 <input type="text" id="simpleinput" class="form-control" name="text" value="{{ $post->text}}" style="height: 100px">
                             </div>       
-                            </h5> 
-                            </h5>
                         </div>
                     </div>    
                 </div>
-            </div>
-       </div>
-       <div class="col-md-12 mt-3 d-flex flex-row-reverse">
-        <button class="btn btn-info" type="submit" onclick="return confirm('are your sure?')" name="submit">Сохранить изменения в  пост</button>
-    </div>
+                <div class="col-lg-11 col-xl-11 ml-auto mr-5 mb-4 d-flex flex-row-reverse ">
+                <button class="btn btn-info" type="submit" onclick="return confirm('are your sure?')" name="submit">Сохранить изменения</button>
+                </div>    
+            </div>  
+        </div>
     </form>
     </div>
 </main>

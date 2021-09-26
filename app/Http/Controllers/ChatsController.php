@@ -415,16 +415,11 @@ class ChatsController extends Controller
     }
 
 
-
-
     public function deleteAvatarStorage($chat_id){
         
         $avatarChat=Chat::find($chat_id)->chat_avatar;
         Storage::delete($avatarChat);
     }
-
-
-
 
     public function listsIdUserInChat(){
         //получение id всех пользователей
@@ -445,7 +440,6 @@ class ChatsController extends Controller
         }
         return $arrey_user_new_chat;
     }
-
 
 
 
@@ -524,6 +518,7 @@ class ChatsController extends Controller
         return redirect('/chats');
     }
 
+
     public function offFavorites($chat_id){
         //проверка наличия id и наличия данных с запрошенным id
         if(!$chat_id || Chat::find($chat_id)!=true ){
@@ -578,6 +573,8 @@ class ChatsController extends Controller
         return redirect('/chats');
     }
 
+
+
     public function roleModerator($user_id, $chat_id){
 
         //проверка наличия id и наличия данных с запрошенным id
@@ -601,6 +598,7 @@ class ChatsController extends Controller
         return redirect('/editChatShow/'.$chat_id.'');
     }
 
+    
     public function roleParticipant($user_id, $chat_id){
         //проверка наличия id и наличия данных с запрошенным id
         if(!$user_id || Userlist::where('user_id',$user_id)->where('chat_id', $chat_id)->get()!=true  ){

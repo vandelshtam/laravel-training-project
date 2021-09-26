@@ -269,7 +269,7 @@
 
 
 <!-- навигационная строка раздела комментариев -->
-<nav id="navbar-example2" class="navbar navbar-light bg-info px-3 m-auto col-md-10" style="border-radius: 5px;">
+<nav id="navbar-example2" class="navbar navbar-light bg-info px-3 m-auto col-lg-10 col-xl-10" style="border-radius: 5px;">
     <a class="navbar-brand" href="#">Комментарии</a>
     <ul class="nav nav-pills">
       <li class="nav-item">
@@ -291,11 +291,11 @@
   </nav>
 
   <!-- comments -->
-  <div data-bs-spy="scroll" data-bs-target="#navbar-example2" data-bs-offset="0" class="scrollspy-example" tabindex="0">
+  <div  class=" col-lg-10 col-xl-10 m-auto" >
     @foreach ($post->comments as $comment)
     <!-- комментарии авторизованного пользователя -->
     @if (Auth::id() == $comment->user_id )
-    <div style="width: 70%; margin:20px 0px 0px 245px;">
+    <div class="col-lg-10 col-xl-10 mt-2 ml-auto" >
         <div class="toast-header bg-info md-3" style="border-radius:5px 5px 0px 0px;">
         <span class="rounded-circle profile-image d-block md-3" style="background-image:url('{{ asset($comment->user->info->avatar) }}'); background-size: cover;"> </span>
         <strong class="md-3">{{ $comment->user->name }}</strong>
@@ -308,20 +308,20 @@
             <a class="bt text-warning ml-auto"  href="/bannedComment/{{ $comment->id }}/{{ $post->id }}">
                 <i class="fa fa-sun btn btn-danger"> </i>Заблокировать комментарий</a>
         @endif     
-        <a class=" btn-close ml-auto" onclick="return confirm('are your sure?')" aria-label="Close"  href="/deleteComment/{{ $comment->id }}/{{ $post->id }}"> Удалить комментарий</a>
+        <a class=" btn-close ml-auto text-white" onclick="return confirm('are your sure?')" aria-label="Close"  href="/deleteComment/{{ $comment->id }}/{{ $post->id }}"> Удалить комментарий</a>
         </div>
         @if ( Auth::user()->admin && $comment->banned==1)
-        <h6 id="scrollspyHeading1 btn-danger" style="background:rgb(245, 158, 118); padding:20px 0px 20px 20px;border-radius:0px 0px 5px 5px;"> Комментарий заблокирован из-за нарушения правил пользования веб сайтом : {{ $comment->comment }}</h6>    
+        <h6 id="scrollspyHeading1 btn-danger" class="bg-danger bg-danger-gradient pt-4 pb-4 pl-4 text-white" style="border-radius:0px 0px 5px 5px;"> Комментарий заблокирован из-за нарушения правил пользования веб сайтом : {{ $comment->comment }}</h6>    
         @elseif ($comment->banned==1)
-        <h6 id="scrollspyHeading1" style="background:rgb(247, 169, 150); padding:40px 0px 20px 40px;border-radius:0px 0px 5px 5px;">Комментарий заблокирован из-за нарушения правил пользования веб сайтом </h6>
+        <h6 id="scrollspyHeading1" class="bg-secondary bg-secondary-gradient pt-4 pb-4 pl-4 text-white" style="border-radius:0px 0px 5px 5px;">Комментарий заблокирован из-за нарушения правил пользования веб сайтом </h6>
         @else
-        <h6 id="scrollspyHeading1" style="background:rgb(247, 240, 150); padding:20px 0px 20px 20px; border-radius:0px 0px 5px 5px;">{{ $comment->comment }}</h6>
+        <h6 id="scrollspyHeading1" class="bg-warning bg-waning-gradient pt-4 pb-4 pl-4" style="border-radius:0px 0px 5px 5px;">{{ $comment->comment }}</h6>
         @endif
     </div> 
 
     <!-- коментарии других пользователей -->
     @else
-    <div style="width: 70%; margin:20px 0px 0px 105px;" >
+    <div class="col-lg-10 col-xl-10 mt-2"  >
         <div class="toast-header bg-info" style="border-radius:5px 5px 0px 0px;">
         <span class="rounded-circle profile-image d-block " style="background-image:url('{{ asset($comment->user->info->avatar) }}'); background-size: cover;"></span>
         <strong class="md-3">{{ $comment->user->name }}</strong>
@@ -334,19 +334,21 @@
             <a class="text-danger ml-auto"  href="/bannedComment/{{ $comment->id }}/{{ $post->id }}">
                 <i class="fa fa-sun btn btn-danger"></i>Заблокировать комментарий</a>
         @endif 
-        <a class=" btn-close ml-auto" onclick="return confirm('are your sure?')" aria-label="Close"  href="/deleteComment/{{ $comment->id }}/{{ $post->id }}">Удалить комментарий</a>    
+        <a class=" btn-close ml-auto text-white" onclick="return confirm('are your sure?')" aria-label="Close"  href="/deleteComment/{{ $comment->id }}/{{ $post->id }}">Удалить комментарий</a>    
         </div>
     @if (Auth::user()->admin && $comment->banned==1)
-    <h6 id="scrollspyHeading1 btn-danger" style="background:rgb(247, 163, 163); padding:20px 0px 20px 20px; "> Комментарий заблокирован из-за нарушения правил пользования веб сайтом :  {{ $comment->comment }}</h6>    
+    <h6 id="scrollspyHeading1 btn-danger" class="bg-danger bg-danger-gradient pt-4 pb-4 pl-4 text-white" style="border-radius:0px 0px 5px 5px;"> Комментарий заблокирован из-за нарушения правил пользования веб сайтом :  {{ $comment->comment }}</h6>    
     @elseif ($comment->banned==1)
-    <h6 id="scrollspyHeading1 btn-danger" style="background:rgb(247, 163, 167); padding:20px 0px 20px 20px; "> Комментарий заблокирован из-за нарушения правил пользования веб сайтом</h6>
+    <h6 id="scrollspyHeading1 btn-danger" class="bg-secondary bg-secondary-gradient pt-4 pb-4 pl-4 text-white" style="border-radius:0px 0px 5px 5px;"> Комментарий заблокирован из-за нарушения правил пользования веб сайтом</h6>
     @else
-    <h6 id="scrollspyHeading1" style="background:rgb(163, 216, 247); padding:20px 0px 20px 20px;border-radius:0px 0px 5px 5px; ">{{ $comment->comment }}</h6>
+    <h6 id="scrollspyHeading1" class=" bg-info-gradient pt-4 pb-4 pl-4" style="border-radius:0px 0px 5px 5px;">{{ $comment->comment }}</h6>
     @endif
     </div> 
+   @endif 
+   @endforeach
   </div>
-  @endif
-  @endforeach
+  
+  
 @endsection
 
 @section('script')
