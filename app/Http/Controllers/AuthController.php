@@ -65,7 +65,7 @@ class AuthController extends BaseController
             'location' => '',
             'position' => '',
             'phone' => '',
-            'avatar' => 'img/demo/avatars/avatar-m.png',
+            'avatar' => 'img/demo/avatars/avatar-f.png',
             'user_id' => $user->id,
             'infosable_id' => $user->id,
 
