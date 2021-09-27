@@ -19,10 +19,19 @@
 
 ## Краткое описание функциональных возможностей ресурса
 
-## Раздел "Пользователи"
+### Раздел "Пользователи"
 В разделе пользователи выполняется функционал по регистрации и редактировании данных пользователей, вывод информации о всех пользователя. Вывод профилей пользователей.
+В этом разделе пользователи имеют возможность:
+- регистрироваться.
+- редактировать свои данные(аватар, контактные данные).
+- удалить свой профиль.
+- редактировать свои данные безопасности(имя, email(логин), пароль).
+- просматривать свой профиль и профили зарегистрированных пользователей.
 
-## Раздел "Посты"
+
+ Пользователь с правом "Адимн" имеет такие же, как выше перечисленные возможности, но по отношению к любому пользователю, в том числе создавать профили новых пользователей.
+
+### Раздел "Посты"
 
 В этом разделе, зарегистрированные и авторизованные пользователи могут:
 - просматривать свои посты и посты других пользователей, оставлять к ним комментарии.
@@ -37,42 +46,23 @@
 - комментариями к посту.
 
 "Админ" дополнительно имеет права в любом посте:
-- блоикровать/разблокировать/удалять посты.
-- блоикровать/разблокировать/удалять чаты.
+- блокировать/разблокировать/удалять посты.
+- блокировать/разблокировать/удалять чаты.
+
+### Раздел "Чаты"
+
+В данном разделе, зарегистрированные и авторизованные пользователи могут:
+- просматривать список чатов участником которых является пользователь.
+- открывать чаты участником которых является пользователь, отправлять и получать сообщения в чате.
+- управлять чатами, автором которых является пользователь(менять участников, изменять роли участников, управлять аватаром, управлять названием).
+- по умолчанию, автор чата имеет роль 'author' со всеми возможностями, другие участники по умолчанию имеют роль 'participant', автор чата может предоставлять и отменять участникам роль 'moderator' со всеми возможностями автора чата.
+
+Пользователь "Админ"  наделен правом  управлять любыми чатами и сообщениями в чате:
+- создавать/удалять/редактировать чаты.
+- блокировать/разблокировать чаты.
+- создавать/удалять сообщения в любом чате.
 
 
-## Laravel Sponsors
+## Краткая документация к проекту
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
-
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[CMS Max](https://www.cmsmax.com/)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+### Проект реализован на фреймворке Laravel 8
