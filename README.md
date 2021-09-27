@@ -1,3 +1,5 @@
+# Учебный  проект выполненный с помощью  Laravel
+
 <p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
 
 <p align="center">
@@ -7,58 +9,167 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
+# О проекте
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+В этом проекте реализован web ресурс простого социального сообщества. Ресурс имеет три основных раздела:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- Раздел "Пользователи".
+- Раздел "Посты"(статьи).
+- Раздел "Чаты.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Краткое описание функциональных возможностей ресурса
 
-## Learning Laravel
+### Раздел "Пользователи"
+В разделе пользователи выполняется функционал по регистрации и редактировании данных пользователей, вывод информации о всех пользователя. Вывод профилей пользователей.
+В этом разделе пользователи имеют возможность:
+- регистрироваться.
+- редактировать свои данные(аватар, контактные данные).
+- удалить свой профиль.
+- редактировать свои данные безопасности(имя, email(логин), пароль).
+- просматривать свой профиль и профили зарегистрированных пользователей.
+- изменять свой статус (онлайн, недоступен, отошел).
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+ Пользователь с правом "Адимн" имеет такие же, как выше перечисленные возможности, но по отношению к любому пользователю, в том числе создавать профили новых пользователей. Админ имеет возможность изменять роль пользователям, предоставляя и отзыва роли "Админ".
 
-## Laravel Sponsors
+### Раздел "Посты"
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+В этом разделе, зарегистрированные и авторизованные пользователи могут:
+- просматривать свои посты и посты других пользователей, оставлять к ним комментарии.
+- создавать свои посты, редактировать свои посты.
 
-### Premium Partners
+Авторы поста или пользователь "Админ"  имеют возможность управлять следующими данными:
+- аватаром поста.
+- фотографиями в галерее поста.
+- фотографиями в галерее поста.
+- заголовком поста.
+- текстом поста.
+- комментариями к посту.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[CMS Max](https://www.cmsmax.com/)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
+"Админ" дополнительно имеет права в любом посте:
+- блокировать/разблокировать/удалять посты.
+- блокировать/разблокировать/удалять чаты.
 
-## Contributing
+### Раздел "Чаты"
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+В данном разделе, зарегистрированные и авторизованные пользователи могут:
+- просматривать список чатов участником которых является пользователь.
+- открывать чаты участником которых является пользователь, отправлять и получать сообщения в чате.
+- управлять чатами, автором которых является пользователь(менять участников, изменять роли участников, управлять аватаром, управлять названием).
+- по умолчанию, автор чата имеет роль 'author' со всеми возможностями, другие участники по умолчанию имеют роль 'participant', автор чата может предоставлять и отменять участникам роль 'moderator' со всеми возможностями автора чата.
 
-## Code of Conduct
+Пользователь "Админ"  наделен правом  управлять любыми чатами и сообщениями в чате:
+- создавать/удалять/редактировать чаты.
+- блокировать/разблокировать чаты.
+- создавать/удалять сообщения в любом чате.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
-## Security Vulnerabilities
+## Краткая документация к проекту
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### Проект реализован на фреймворке Laravel 8
 
-## License
+#### Краткое описание важных файлов проекта
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+##### Дерриктория database/migrations 
+В этой папке создержатся файлы создания таблиц БД проекта:
+- Users в которой содержиться регистрационная информация о пользователе(name, email, password).
+- Infos содержит дополнительную информацию о пользователе(avatar,phone, location и др).
+- Socials содержит информацию и социальных сетях пользователя(vk, telegram, instagram).
+- Posts информация о постах проекта.
+- Comments информация о комментариях к постам в проекте.
+- Images хранение картинок к постам.
+- Chats данные о чатах.
+- Messages запись данных сообщений в чатах.
+- Userlists данные связывающие пользователей уаствующих в чате и чаты.
+
+##### Дерриктория database/factories 
+В этой папке создержатся файлы заполнения таблиц БД проекта фейковыми данными:
+
+##### Дерриктория public/css, public/js 
+В данной папке лежат файлы стилей для верстки проекта
+
+##### Дерриктория database/img 
+В этой дерриктории находятся картинки для оформления проекта и базового заполнения сведений о пользователях, чатах, постах
+
+##### Дерриктория database/uploads 
+Хранение картинок пользователей используемых для аваторов пользователей, аваторов поста и чата, картинок галереи паста.
+
+
+##### Дерриктория resources/views 
+Файлы верстки проекта:
+- 'users.blade.php' страница просмотра всех пользователей.
+- 'user_profile.blade.php' страница профиля пользоватиеля.
+- 'create_users.blade.php' страница создания нового пользователя.
+- 'login.blade.php' страница авторизации пользовтеля.
+- 'edit.blade.php' страница редактирования информации о пользователе.
+- 'layout.blade.php' основная страница подключения визуализации.
+- 'register.blade.php' страница регистрации нового пользователя.
+- 'verify_email.blade.php' страница вывода информации для повторного подтверждения email при верификации после агистрации пользователя.
+- 'security.blade.php' страница изменения главных данных пользователя (email, name, password).
+- 'media.blade.php' страница управления аватаром пользователя.
+- 'status.blade.php' страница управления статусом пользователя.
+- 'statusAdmin.blade.php' страница предоставления статуса Админ пользователям.
+- 'confirm_password.blade.php' страница повторного подтверждения пароля при выполнении важных изменений(смена почты, пароля, имя, удаления профиля пользователя).
+- 'welcome.blade.php' страница информации Laravel.
+- 'posts.blade.php' страница вывода всех постов.
+- 'post.blade.php' страница просмотра поста.
+- 'addPost.blade.php' страница добавления нового поста.
+- 'editPost.blade.php' страница редактирования поста.
+- 'imagePostShow.blade.php' страница просмотра фотографий из  галереи поста (просмотр по одной фотографии).
+- 'search.blade.php' страница вывода найденных пользователей, при выполнении поиска пользователя.
+- 'statusAdmin.blade.php' страница предоставления статуса Админ пользователям.
+- 'confirm_password.blade.php' страница повторного подтверждения пароля при выполнении важных изменений(смена почты, пароля, имя, удаления профиля пользователя).
+- 'welcome.blade.php' страница информации Laravel.
+- 'chats.blade.php' страница вывода всех постов.
+- 'openChat.blade.php' страница просмотра поста.
+- 'addChatShow.blade.php' страница добавления нового поста.
+- 'editChatShow.blade.php' страница редактирования поста.
+
+##### Дерриктория  app/http/controllers
+Все действия связанные с  пользователями и их ресурсами производятся в данной дерриктории
+
+##### 'AuthControllers.php' этот файл (класс) выполняет:
+- регистрацию пользователей.
+- авторизацию пользователей.
+- смену информации безопасности пользователей(смена почты, смена пароля, смена имени).
+- выход из системы.
+- повторное подтверждение пароля при выполнении важных действий.
+
+##### 'UsersControllers.php' в этом классе выполняются следующие действия:
+- вывод страниц со списком пользователей, вывод страницы профиля пользователей.
+- вывод страницы  и добавление нового пользователя.
+- вывод страницы и выполнение изменение статуса пользователя.
+- вывод страницы и редактирование информации о пользователе.
+- вывод страницы и изменение роли пользователя(преджоставление роли администратора).
+- вывод страницы и изменение аватара пользователя.
+- вывод страницы и выполнение удаления пользователя.
+- вывод страницы и выполнение поиска пользователя.
+- блокировка/разблокировка пользователей
+
+##### 'PostsControllers.php' в этом классе выполняются следующие действия:
+- вывод страниц со списком  постов.
+- вывод страницы  поста.
+- добавление нового поста.
+- редактирование поста.
+- удаление поста.
+- поиск постов.
+- добавление/удаление постов в избранное/из избранного.
+- блокировка/разблокировка постов.
+- добавление/удаление комментариев к посту.
+- блокировка/разблокировка коментариев к постам.
+- вывод избранных постов.
+- вывод моих (автора) постов.
+
+##### 'ChatsControllers.php' в этом классе выполняются следующие действия:
+- вывод страниц со списка чатов.
+- вывод страницы  чата.
+- добавление нового чата.
+- редактирование чата.
+- удаление чата.
+- поиск чатов.
+- добавление/удаление чатов в избранное/из избранного.
+- блокировка/разблокировка чатов.
+- добавление/удаление сообщений в чате.
+- вывод избранных чатов.
+- вывод моих (автора) чатов.
+
