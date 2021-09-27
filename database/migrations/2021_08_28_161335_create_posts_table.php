@@ -19,7 +19,7 @@ class CreatePostsTable extends Migration
             $table->integer('user_id');
             $table->string('text');
             $table->string('name_post');
-            $table->string('avatar_post');
+            $table->string('avatar_post', 'img/demo/avatars/avatar-f.png');
             $table->string('title_post');
             $table->integer('favorites')->nullable();
             $table->integer('postable_id');

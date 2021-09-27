@@ -246,8 +246,10 @@ class PostsController extends Controller
 
             //удаление текущего аватара поста из папки хранения
             $avatarPost=Post::find($post_id)->avatar;
-            Storage::delete($avatarPost);
-
+            if($avatarPost != 'img/demo/avatars/admin-g.png'){
+                Storage::delete($avatarPost);
+            }
+            
             //обновление ссылки на ваватар в БД
             Post::where('id', $post_id)
             ->update([

@@ -418,7 +418,9 @@ class ChatsController extends Controller
     public function deleteAvatarStorage($chat_id){
         
         $avatarChat=Chat::find($chat_id)->chat_avatar;
-        Storage::delete($avatarChat);
+        if($avatarChat != 'img/demo/avatars/admin-g.png'){
+            Storage::delete($avatarChat);
+        }   
     }
 
     public function listsIdUserInChat(){
@@ -598,7 +600,7 @@ class ChatsController extends Controller
         return redirect('/editChatShow/'.$chat_id.'');
     }
 
-    
+
     public function roleParticipant($user_id, $chat_id){
         //проверка наличия id и наличия данных с запрошенным id
         if(!$user_id || Userlist::where('user_id',$user_id)->where('chat_id', $chat_id)->get()!=true  ){

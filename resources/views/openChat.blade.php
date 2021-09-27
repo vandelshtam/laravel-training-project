@@ -144,8 +144,8 @@
                 
                 @foreach ($chat->messages as $message)
                 @if(auth()->user()->id != $message->user_id)
-                <div class="col-xl-4  ">
-                    <div id="c_1" class="card border shadow-0 mb-g shadow-sm-hover " data-filter-tags="" style="width: 80%; margin-left: 245px; border-radius: 10px;">
+                <div class="col-lg-8 col-xl-8 ml-auto">
+                    <div id="c_1" class="card border shadow-0 mb-g shadow-sm-hover rounded">
                         <div class="card-body border-faded border-top-0 border-left-0 border-right-0 rounded-top bg-warning bg-info-gradient" >
                             <div class="d-flex flex-row align-items-center ">
                                 
@@ -172,75 +172,69 @@
 
                                     <!--выпадающее подменю-->
                                     @if ( Auth::user()->admin)
-                                    <div class="dropdown-menu">
-                                        
-                                        <a href="/delete_message/{{ $message->id }}/{{ $message->user_id }}/{{ $chat->id }}" class="dropdown-item" onclick="return confirm('are you sure?');">
-                                            <i class="fa fa-window-close"></i>
-                                        Удалить сообщение
-                                        </a>   
-                                    </div>
+                                        <div class="dropdown-menu">
+                                            
+                                            <a href="/delete_message/{{ $message->id }}/{{ $message->user_id }}/{{ $chat->id }}" class="dropdown-item" onclick="return confirm('are you sure?');">
+                                                <i class="fa fa-window-close"></i>
+                                            Удалить сообщение
+                                            </a>   
+                                        </div>
                                     @endif
-                                    <p class="text-truncate text-truncate-xl  md-5">сообщение:</p>
-                                    <span class="text-truncate text-truncate-xl  md-5" style="width: 80%; white-space: pre-wrap;">{{ $message -> message }}</span>
-                                </div>
                                     <span class="text-truncate text-truncate-xl">{{ $message->created_at }}</span>
-                            </div>
-                        </div>    
-                    </div>
-                </div> 
-                
-                @endif 
-            </div>
-
-
-            <!-- вывод сообщений  автора чата ( свои сообщения) -->
-            @if(auth()->user()->id == $message->user_id)
-                
-                <div class="col-xl-4  ">
-                    <div id="c_1" class="card border shadow-0 mb-g shadow-sm-hover " data-filter-tags="" style="width: 80%; border-radius: 10px;">
-                        <div class="card-body border-faded border-top-0 border-left-0 border-right-0 rounded-top bg-blue bg-info-gradient" >
-                            <div class="d-flex flex-row align-items-center ">
-                                <!-- статус пользователя -->
-                                @foreach ($message->user->infos as $info)
-                                @if ($info->status == 0)
-                                    <span class="status status-success mr-3">
-                                @endif
-                                @if ($info->status == 1)
-                                    <span class="status status-danger mr-3">
-                                @endif
-                                @if ($info->status == 2)
-                                    <span class="status status-warning mr-3">
-                                @endif
-                                    <span class="rounded-circle profile-image d-block " style="background-image:url('{{ asset($info->avatar) }}'); background-size: cover;"></span>
-                                </span>
-                                @endforeach
-                                <div class="info-card-text flex-1">
-                                    <a href="javascript:void(0);" class="fs-xl text-truncate text-truncate-lg text-info" data-toggle="dropdown" aria-expanded="false">
-                                        {{ $message->user->name }}
-                                        <i class="fal fas fa-cog fa-fw d-inline-block ml-1 fs-md"></i>
-                                        <i class="fal fa-angle-down d-inline-block ml-1 fs-md"></i>
-                                    </a>
-
-                                    <!--выпадающее подменю-->
-                                    @if ( Auth::user()->admin || auth()->user()->id == $message->user_id)
-                                    <div class="dropdown-menu">
-                                        
-                                        <a href="/delete_message/{{ $message->id }}/{{ $message->user_id }}/{{ $chat->id }}" class="dropdown-item" onclick="return confirm('are you sure?');">
-                                            <i class="fa fa-window-close"></i>
-                                        Удалить сообщение
-                                        </a>   
-                                    </div>
-                                    @endif
                                     <p class="text-truncate text-truncate-xl  md-5">сообщение:</p>
-                                    <span class="text-truncate text-truncate-xl  md-5" style="width: 80%;  white-space: pre-wrap;">{{ $message -> message }}</span>
-                                </div>
-                                    <span class="text-truncate text-truncate-xl md-1">{{ $message->created_at }}</span>
+                                    <span class="text-truncate text-truncate-xl  md-5" style="white-space: pre-wrap;">{{ $message -> message }}</span>
+                                </div>       
                             </div>
                         </div>    
                     </div>
-                </div> 
+                </div>  
                 @endif 
-        <div> 
+        
+            <!-- вывод сообщений  авторизованного участника чата ( свои сообщения) -->
+                @if(auth()->user()->id == $message->user_id)    
+                    <div class="col-lg-8 col-xl-8 mr-auto">
+                        <div id="c_1" class="card border shadow-0 mb-g shadow-sm-hover rounded">
+                            <div class="card-body border-faded border-top-0 border-left-0 border-right-0 rounded-top bg-blue bg-info-gradient" >
+                                <div class="d-flex flex-row align-items-center ">
+                                    <!-- статус пользователя -->
+                                    @foreach ($message->user->infos as $info)
+                                    @if ($info->status == 0)
+                                        <span class="status status-success mr-3">
+                                    @endif
+                                    @if ($info->status == 1)
+                                        <span class="status status-danger mr-3">
+                                    @endif
+                                    @if ($info->status == 2)
+                                        <span class="status status-warning mr-3">
+                                    @endif
+                                        <span class="rounded-circle profile-image d-block " style="background-image:url('{{ asset($info->avatar) }}'); background-size: cover;"></span></span>
+                                    @endforeach
+                                        <div class="info-card-text flex-1">
+                                            <a href="javascript:void(0);" class="fs-xl text-truncate text-truncate-lg text-info" data-toggle="dropdown" aria-expanded="false">
+                                                {{ $message->user->name }}
+                                                <i class="fal fas fa-cog fa-fw d-inline-block ml-1 fs-md"></i>
+                                                <i class="fal fa-angle-down d-inline-block ml-1 fs-md"></i>
+                                            </a>
+
+                                            <!--выпадающее подменю-->
+                                            @if ( Auth::user()->admin || auth()->user()->id == $message->user_id)
+                                                <div class="dropdown-menu row">
+                                                    
+                                                    <a href="/delete_message/{{ $message->id }}/{{ $message->user_id }}/{{ $chat->id }}" class="dropdown-item" onclick="return confirm('are you sure?');">
+                                                        <i class="fa fa-window-close"></i>
+                                                    Удалить сообщение
+                                                    </a>   
+                                                </div>   
+                                            @endif
+                                            <span class="text-truncate text-truncate-xl mr-auto">{{ $message->created_at }}</span>
+                                            <p class="text-truncate text-truncate-xl  md-5">сообщение:</p>
+                                            <span class="text-truncate text-truncate-xl md-5" style="white-space: pre-wrap;">{{ $message -> message }}</span>
+                                        </div>            
+                                </div>
+                            </div>    
+                        </div>
+                    </div> 
+                @endif  
     @endforeach  
     </div> 
 </main>

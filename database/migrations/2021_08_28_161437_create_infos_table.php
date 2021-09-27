@@ -15,12 +15,12 @@ class CreateInfosTable extends Migration
     {
         Schema::create('infos', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('occupation');
-            $table->string('location');
-            $table->text('position');
-            $table->text('phone');
+            $table->string('occupation')->nullable();
+            $table->string('location')->nullable();
+            $table->text('position')->nullable();
+            $table->text('phone')->nullable();
             $table->integer('status')->default(0);
-            $table->string('avatar')->nullable();
+            $table->string('avatar', 'img/demo/avatars/avatar-f.png');
             $table->integer('user_id');
             $table->integer('infosable_id');
             $table->timestamps();

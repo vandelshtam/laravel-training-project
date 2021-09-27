@@ -261,7 +261,7 @@
        </div>
 
        <!-- конопка добавления поста -->
-       <div class="col-md-12 mt-3 d-flex flex-row-reverse">
+       <div class="col-md-12 mt-3 mb-3 d-flex flex-row-reverse">
         <button class="btn btn-info" type="submit" name="submit">Сохранить изменения в чате</button>
     </div>
     </form>

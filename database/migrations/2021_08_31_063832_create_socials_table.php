@@ -15,9 +15,9 @@ class CreateSocialsTable extends Migration
     {
         Schema::create('socials', function (Blueprint $table) {
             $table->id();
-            $table->text('telegram');
-            $table->text('instagram');
-            $table->text('vk');
+            $table->text('telegram')->nullable();
+            $table->text('instagram')->nullable();
+            $table->text('vk')->nullable();
             $table->integer('user_id');
             $table->timestamps();
         });

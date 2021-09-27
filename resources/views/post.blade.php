@@ -269,7 +269,7 @@
 
 
 <!-- навигационная строка раздела комментариев -->
-<nav id="navbar-example2" class="navbar navbar-light bg-info px-3 m-auto col-lg-10 col-xl-10" style="border-radius: 5px;">
+<nav id="navbar-example2" class="navbar navbar-light bg-info px-3 m-auto col-lg-10 col-xl-10 rounded">
     <a class="navbar-brand" href="#">Комментарии</a>
     <ul class="nav nav-pills">
       <li class="nav-item">
@@ -277,15 +277,6 @@
       </li>
       <li class="nav-item">
         <a class="nav-link text-white"" href="#scrollspyHeading2">Сначала старые</a>
-      </li>
-      <li class="nav-item dropdown">
-        <a class="nav-link dropdown-toggle text-white"" data-bs-toggle="dropdown" href="#" role="button" aria-expanded="false">Меню</a>
-        <ul class="dropdown-menu">
-          <li><a class="dropdown-item" href="#scrollspyHeading3">меню1</a></li>
-          <li><a class="dropdown-item" href="#scrollspyHeading4">меню2</a></li>
-          <li><hr class="dropdown-divider"></li>
-          <li><a class="dropdown-item" href="#scrollspyHeading5">меню3</a></li>
-        </ul>
       </li>
     </ul>
   </nav>
@@ -296,7 +287,7 @@
     <!-- комментарии авторизованного пользователя -->
     @if (Auth::id() == $comment->user_id )
     <div class="col-lg-10 col-xl-10 mt-2 ml-auto" >
-        <div class="toast-header bg-info md-3" style="border-radius:5px 5px 0px 0px;">
+        <div class="toast-header bg-info md-3 rounded-top">
         <span class="rounded-circle profile-image d-block md-3" style="background-image:url('{{ asset($comment->user->info->avatar) }}'); background-size: cover;"> </span>
         <strong class="md-3">{{ $comment->user->name }}</strong>
         <small class="ml-auto"> {{ $comment->updated_at }} </small>
@@ -305,24 +296,24 @@
             <a class="bt btn-warning ml-auto"  href="/unBannedComment/{{ $comment->id }}/{{ $post->id }}">
                 <i class="fa fa-sun btn btn-warning"> </i>Разблокировать комментарий</a>   
         @elseif (Auth::user()->admin)
-            <a class="bt text-warning ml-auto"  href="/bannedComment/{{ $comment->id }}/{{ $post->id }}">
+            <a class="bt text-danger ml-auto"  href="/bannedComment/{{ $comment->id }}/{{ $post->id }}">
                 <i class="fa fa-sun btn btn-danger"> </i>Заблокировать комментарий</a>
         @endif     
         <a class=" btn-close ml-auto text-white" onclick="return confirm('are your sure?')" aria-label="Close"  href="/deleteComment/{{ $comment->id }}/{{ $post->id }}"> Удалить комментарий</a>
         </div>
         @if ( Auth::user()->admin && $comment->banned==1)
-        <h6 id="scrollspyHeading1 btn-danger" class="bg-danger bg-danger-gradient pt-4 pb-4 pl-4 text-white" style="border-radius:0px 0px 5px 5px;"> Комментарий заблокирован из-за нарушения правил пользования веб сайтом : {{ $comment->comment }}</h6>    
+        <h6 id="scrollspyHeading1 btn-danger" class="bg-danger bg-danger-gradient pt-4 pb-4 pl-4 text-white rounded-bottom"> Комментарий заблокирован из-за нарушения правил пользования веб сайтом : {{ $comment->comment }}</h6>    
         @elseif ($comment->banned==1)
-        <h6 id="scrollspyHeading1" class="bg-secondary bg-secondary-gradient pt-4 pb-4 pl-4 text-white" style="border-radius:0px 0px 5px 5px;">Комментарий заблокирован из-за нарушения правил пользования веб сайтом </h6>
+        <h6 id="scrollspyHeading1" class="bg-secondary bg-secondary-gradient pt-4 pb-4 pl-4 text-white rounded-bottom">Комментарий заблокирован из-за нарушения правил пользования веб сайтом </h6>
         @else
-        <h6 id="scrollspyHeading1" class="bg-warning bg-waning-gradient pt-4 pb-4 pl-4" style="border-radius:0px 0px 5px 5px;">{{ $comment->comment }}</h6>
+        <h6 id="scrollspyHeading1" class="bg-warning bg-waning-gradient pt-4 pb-4 pl-4 rounded-bottom">{{ $comment->comment }}</h6>
         @endif
     </div> 
 
     <!-- коментарии других пользователей -->
     @else
     <div class="col-lg-10 col-xl-10 mt-2"  >
-        <div class="toast-header bg-info" style="border-radius:5px 5px 0px 0px;">
+        <div class="toast-header bg-info rounded-top">
         <span class="rounded-circle profile-image d-block " style="background-image:url('{{ asset($comment->user->info->avatar) }}'); background-size: cover;"></span>
         <strong class="md-3">{{ $comment->user->name }}</strong>
         <small class="ml-auto">{{ $comment->updated_at}}</small>
@@ -337,11 +328,11 @@
         <a class=" btn-close ml-auto text-white" onclick="return confirm('are your sure?')" aria-label="Close"  href="/deleteComment/{{ $comment->id }}/{{ $post->id }}">Удалить комментарий</a>    
         </div>
     @if (Auth::user()->admin && $comment->banned==1)
-    <h6 id="scrollspyHeading1 btn-danger" class="bg-danger bg-danger-gradient pt-4 pb-4 pl-4 text-white" style="border-radius:0px 0px 5px 5px;"> Комментарий заблокирован из-за нарушения правил пользования веб сайтом :  {{ $comment->comment }}</h6>    
+    <h6 id="scrollspyHeading1 btn-danger" class="bg-danger bg-danger-gradient pt-4 pb-4 pl-4 text-white rounded-bottom" > Комментарий заблокирован из-за нарушения правил пользования веб сайтом :  {{ $comment->comment }}</h6>    
     @elseif ($comment->banned==1)
-    <h6 id="scrollspyHeading1 btn-danger" class="bg-secondary bg-secondary-gradient pt-4 pb-4 pl-4 text-white" style="border-radius:0px 0px 5px 5px;"> Комментарий заблокирован из-за нарушения правил пользования веб сайтом</h6>
+    <h6 id="scrollspyHeading1 btn-danger" class="bg-secondary bg-secondary-gradient pt-4 pb-4 pl-4 text-white rounded-bottom" > Комментарий заблокирован из-за нарушения правил пользования веб сайтом</h6>
     @else
-    <h6 id="scrollspyHeading1" class=" bg-info-gradient pt-4 pb-4 pl-4" style="border-radius:0px 0px 5px 5px;">{{ $comment->comment }}</h6>
+    <h6 id="scrollspyHeading1" class=" bg-info-gradient pt-4 pb-4 pl-4 rounded-bottom" >{{ $comment->comment }}</h6>
     @endif
     </div> 
    @endif 

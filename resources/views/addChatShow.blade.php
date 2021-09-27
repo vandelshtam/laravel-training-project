@@ -177,11 +177,11 @@
    
                             <!--  выбор пользователя для добавления в чат -->
                             <h4><span class="text-truncate text-truncate-xl">Выберите и добавьте пользователя  в чат</span></h4>
-                            <div class="row" id="js-contacts">
+                            <div class="row p-2" id="js-contacts">
                                 @if(auth()->user()->admin || Auth::check())
                                 @foreach ($users as $user)
                                 
-                                <div class="col-xl-4">
+                                <div class="col-xl-4 m-auto">
                                     <div id="c_1" class="card border shadow-0 mb-g shadow-sm-hover" data-filter-tags="">
                                         <div class="card-body border-faded border-top-0 border-left-0 border-right-0 rounded-top">
                                             <div class="d-flex flex-row align-items-center">
@@ -195,7 +195,7 @@
                                                     <!--подменю-->
                                                     @if (Auth::check() || Auth::user()->admin)
                                                         
-                                                        <a class="dropdown-item md-1" href="/profile/{{ $user->id }}">
+                                                        <a class="dropdown-item col-md-4" href="/profile/{{ $user->id }}">
                                                             <i class="fa fa-edit md-1"></i>
                                                         Открыть  профиль</a>
                                                     @endif      
@@ -221,15 +221,14 @@
                                 @endforeach 
                                 @endif 
                             </div>   
-                    </div>   
-                </div>
+                    </div> 
+                      <!-- конопка добавления чата -->
+                    <div class="col-md-12 mb-3  d-flex flex-row-reverse">
+                    <button class="btn btn-info" type="submit" name="submit">Создать новый чат</button>
+                    </div>
+                </div>        
             </div>
-       </div>
-
-       <!-- конопка добавления поста -->
-       <div class="col-md-12 mt-3 d-flex flex-row-reverse">
-        <button class="btn btn-info" type="submit" name="submit">Создать новый чат</button>
-    </div>
+       </div>   
     </form>
     </div>
 </main>

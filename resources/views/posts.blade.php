@@ -141,7 +141,7 @@
             </div>
 
             <div class="row">   
-                <div class="col-lg-10 col-xl-10 m-auto" ">
+                <div class="col-lg-10 col-xl-10 m-auto">
                 @if (Auth::check() || Auth::user()->admin)
                     <a class="btn btn-info" href="/addPost">Добавить пост</a>
                 @endif

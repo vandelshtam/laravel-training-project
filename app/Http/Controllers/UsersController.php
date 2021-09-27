@@ -188,7 +188,6 @@ class UsersController extends BaseController
             ]);
             
             //запись новых данных в БД
-            
             User::where('id', $id)
               ->update(['name' => $this->request->name]);
 
@@ -287,9 +286,12 @@ class UsersController extends BaseController
             $this->request->session()->flash('flash_message_danger','You do not have permission to edit user profile!');
             return redirect('/');
         }
-        //удаление теекущего аватара
+        //удаление текущего аватара
         $imageName = Info::find($id)->avatar;
-        Storage::delete($imageName); 
+        if($imageName != 'img/demo/avatars/admin-g.png'){
+            Storage::delete($imageName); 
+        }
+        
 
         //запись нового аватара
             Info::where('id', $id)
