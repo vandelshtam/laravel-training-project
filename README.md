@@ -9,25 +9,35 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
-## About Laravel
+## О проекте
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+В этом проекте реализован web ресурс простого социального сообщества. Ресурс имеет три основных раздела:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- Раздел "Пользователи".
+- Раздел "Посты"(статьи).
+- Раздел "Чаты.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Краткое описание функциональных возможностей ресурса
 
-## Learning Laravel
+# Раздел "Пользователи"
+В разделе пользователи выполняется функционал по регистрации и редактировании данных пользователей, вывод информации о всех пользователя. Вывод профилей пользователей.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+# Раздел "Посты"
+В этом разделе, зарегистрированные и авторизованные пользователи могут:
+-просматривать свои посты и посты других пользователей, оставлять к ним комментарии;
+-создавать свои посты, редактировать свои посты;
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Авторы поста или пользователь "Админ"  имеют возможность управлять следующими данными:
+-аватаром поста;
+-фотографиями в галерее поста;
+-названием поста;
+-заголовком поста;
+-текстом поста;
+-комментариями к посту;
+
+"Админ" дополнительно имеет права в любом посте:
+-блоикровать/разблокировать/удалять посты;
+-блоикровать/разблокировать/удалять комментарии;
 
 ## Laravel Sponsors
 
