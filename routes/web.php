@@ -79,7 +79,6 @@ Route::get('/editChatShow/{chat_id}', [ChatsController::class, 'editChatShow']);
 Route::get('/deleteUsersIsChat/{user_id?}/{chat_id?}', [ChatsController::class, 'deleteUsersIsChat']);
 Route::get('/deleteChat/{chat_id?}', [ChatsController::class, 'deleteChat']);
 Route::post('/editChat/{chat_id}', [ChatsController::class, 'editChat']);
-Route::get('/chatsAdmin', [ChatsController::class, 'chatsAdmin']);
 Route::get('/chatsFavorites', [ChatsController::class, 'chatsFavorites']);
 Route::get('/chatsMy', [ChatsController::class, 'chatsMy']);
 Route::get('/searchChats', [ChatsController::class, 'searchChats']);
@@ -92,7 +91,6 @@ Route::post('/addNewComment/{post_id?}', [PostsController::class, 'addNewComment
 Route::post('/downloadImage/{post_id?}/{user_id}', [PostsController::class, 'downloadImage']);
 Route::post('/changeAvatar/{post_id?}', [PostsController::class, 'changeAvatar']);
 Route::post('/editInsertPost/{post_id?}', [PostsController::class, 'editInsertPost']);
-//Route::get('/email/verify', [AuthController::class, 'verify_email']);
 });
 
 Route::get('/email/verify', function () {
@@ -114,10 +112,6 @@ Route::get('/onBannedChat/{chat_id}', [ChatsController::class, 'onBannedChat']);
 Route::get('/offBannedChat/{chat_id}', [ChatsController::class, 'offBannedChat']);
 });
 
-//Route::get('/email/verify', function () {
-//    return view('auth.verify_email',);
-//})->middleware('auth')->name('verification.notice');
-
 Route::get('/email/verification-notification', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
 
@@ -129,8 +123,6 @@ Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $requ
 
     return redirect('/');
 })->middleware(['auth', 'signed'])->name('verification.verify');
-
-//Route::get('/verify', [AuthController::class, 'verify_email']);
 
 Route::fallback(function() {
     abort(404);
