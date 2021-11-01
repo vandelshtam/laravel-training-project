@@ -20,8 +20,8 @@
 @endsection
 
 @section('nav')
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary bg-primary-gradient">
-    <a class="navbar-brand d-flex align-items-center fw-500" href="users.html"><img alt="logo" class="d-inline-block align-top mr-2" src="img/logo.png"> Учебный проект</a> <button aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarColor02" data-toggle="collapse" type="button"><span class="navbar-toggler-icon"></span></button>
+<nav class="navbar navbar-expand-lg navbar-dark bg-danger bg-danger-gradient">
+    <a class="navbar-brand d-flex align-items-center fw-500" href="users.html"><img alt="logo" class="d-inline-block align-top mr-2" src="img/message.png" style="width:35px;">Book of friends</a> <button aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarColor02" data-toggle="collapse" type="button"><span class="navbar-toggler-icon"></span></button>
     <div class="collapse navbar-collapse" id="navbarColor02">
         <ul class="navbar-nav md-3">
             <li class="nav-item active">
@@ -88,26 +88,25 @@
                     <i class='subheader-icon fal fa-users'></i> Список пользователей
                 </h1>
             </div>
-            <div class="row">    
+            
+            <div class="row">
                 <div class="col-xl-12">
                     @if (Auth::check() && Auth::user()->admin)
-                    <a class="btn btn-success" href="/create">Добавить</a>
-                @endif
-                <form action="/search" method="GET">
-                    {{ csrf_field() }}
+                    <a class="btn btn-danger" href="/create">Добавить</a>
+                    @endif
                     <div class="border-faded bg-faded p-3 mb-g d-flex mt-3">
-                        <input type="text" id="js-filter-contacts" name="filter_contacts" class="form-control shadow-inset-2 form-control-lg" placeholder="Найти пользователя">
+                        <input type="text" id="js-filter-contacts" name="filter-contacts" class="form-control shadow-inset-2 form-control-lg" placeholder="Найти пользователя">
                         <div class="btn-group btn-group-lg btn-group-toggle hidden-lg-down ml-3" data-toggle="buttons">
                             <label class="btn btn-default active">
-                                <input type="radio" name="contactview" id="grid" checked="" value="{{ old('filter_contacts') }}"><i class="fas fa-table"></i>
+                                <input type="radio" name="contactview" id="grid" checked="" value="grid"><i class="fas fa-table"></i>
                             </label>
                             <label class="btn btn-default">
                                 <input type="radio" name="contactview" id="table" value="table"><i class="fas fa-th-list"></i>
                             </label>
+                            
                         </div>
-                        <button class="btn btn-warning" type="submit" name="submit"> Найти</button>
                     </div>
-                </form>    
+                    
                 </div>
             </div>
 
@@ -115,7 +114,7 @@
             <div class="row" id="js-contacts">
                 @foreach ($users as $user)
                 <div class="col-xl-4">
-                    <div id="c_1" class="card border shadow-0 mb-g shadow-sm-hover" data-filter-tags="oliver kopyov">
+                    <div id="{{ $user->c }}" class="card border shadow-0 mb-g shadow-sm-hover" data-filter-tags="{{ $user->search }}">
                         <div class="card-body border-faded border-top-0 border-left-0 border-right-0 rounded-top">
                             <div class="d-flex flex-row align-items-center">
                                 <!-- статус пользователя -->
@@ -139,7 +138,7 @@
 
                                     <!--выпадающее подменю-->
                                     @if(Auth::check())
-                                    <div class="dropdown-menu">
+                                    <div class="dropdown-menu bg-ganger bg-danger-gradient">
                                         <a class="dropdown-item" href="/profile/{{ $user->id }}">
                                             <i class="fa fa-edit"></i>
                                         Открыть профиль</a>
@@ -204,18 +203,18 @@
                 </div> 
                 @endforeach   
             </div>
-        <div>
+        
         {{ $users->links() }}    
-        </div> 
+        
 </main> 
 <!-- BEGIN Page Footer -->
 <footer class="page-footer" role="contentinfo">
     <div class="d-flex align-items-center flex-1 text-muted">
-        <span class="hidden-md-down fw-700">2020 © Учебный проект</span>
+        <span class="hidden-md-down fw-700">2021 © Lesson-hobby-project</span>
     </div>
     <div>
         <ul class="list-table m-0">
-            <li><a href="intel_introduction.html" class="text-secondary fw-700">Home</a></li>
+            <li><a href="/" class="text-secondary fw-700">Home</a></li>
             <li class="pl-3"><a href="/about" class="text-secondary fw-700">About</a></li>
         </ul>
     </div>

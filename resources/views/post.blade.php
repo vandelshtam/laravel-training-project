@@ -17,13 +17,13 @@
     <link rel="stylesheet" media="screen, print" href="{{ asset('css/fa-solid.css') }}">
     <link rel="stylesheet" media="screen, print" href="{{ asset('css/fa-brands.css') }}">
     <link rel="stylesheet" media="screen, print" href="{{ asset('css/fa-regular.css') }}"> 
-    
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/style.css') }}">  
     
 @endsection
 
 @section('navchat')
-<nav class="navbar navbar-expand-lg navbar-dark bg-info bg-info-gradient">
-    <a class="navbar-brand d-flex align-items-center fw-500" href="users.html"><img alt="logo" class="d-inline-block align-top mr-2" src="{{ asset('img/logo.png') }}">Страница постов</a> <button aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarColor02" data-toggle="collapse" type="button"><span class="navbar-toggler-icon"></span></button>
+<nav class="navbar navbar-expand-lg navbar-dark bg-danger bg-primary-gradient fixed-top">
+    <a class="navbar-brand d-flex align-items-center fw-500" href="users.html"><img alt="logo" class="d-inline-block align-top mr-2" src="/laravel-training-project/public/img/message.png" style="width: 35px;"> Book of friends</a> <button aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarColor02" data-toggle="collapse" type="button"><span class="navbar-toggler-icon"></span></button>
     <div class="collapse navbar-collapse" id="navbarColor02">
         <ul class="navbar-nav md-3">
             <li class="nav-item active">
@@ -65,40 +65,37 @@
 @endsection
 
 @section('content')
-<main id="js-page-content" role="main" class="page-content mt-3">
+<main id="js-page-content" role="main" class="page-content mt-6">
 
             <!-- флеш сообщения,  начало блока-->
             @if ($flash_message_success)
-            <div class="alert alert-success">
+            <div class="alert alert-success mt-6">
                 {{ $flash_message_success }}   
             </div>    
             @endif
             @if ($flash_message_danger)
-            <div class="alert alert-danger">
+            <div class="alert alert-danger mt-6">
                 {{ $flash_message_danger }}   
             </div>    
             @endif
             <!-- флеш сообщения, окончание блока  -->
 
             <!-- добавить пост -->
-            <div class="row">   
-                <div class="m-auto" style="width: 77%">
-                    @if (Auth::check() && Auth::user()->admin)
-                    <a class="btn btn-info" href="/addPost">Добавить пост</a>
-                @endif
-                </div>
+            <div class="row mt-5">       
+                @if (Auth::check() && Auth::user()->admin)
+                    <a class="btn btn-danger" href="/addPost">Добавить пост</a>
+                @endif    
             </div>       
 @endsection
 
 @section('posts')
-<main id="js-page-content" role="main" class="page-content mt-3">
-    <div class="subheader">
+    <div class="subheader mt-3">
         <h1 class="subheader-title">
             <i class='subheader-icon fal fa-user'></i> {{ $post->name_post }}
         </h1>
     </div> 
     <div class="row">
-      <div class="col-lg-10 col-xl-10 m-auto">
+      <div class="col-lg-12 col-xl-12 m-auto">
             <!-- profile summary -->
             <div class="card mb-g rounded-top">
                 <div class="row no-gutters row-grid">
@@ -123,10 +120,10 @@
                                 @endif
                                 @if (Auth::user()->admin && $post->banned==1)
                                     <a class="dropdown-item"  href="/unBannedPost/{{ $post->id }}">
-                                        <i class="fa fa-sun btn btn-warning"></i>Разблокировать пост</a>   
+                                        <i class="fa fa-unlock btn btn-warning"></i>Разблокировать пост</a>   
                                 @elseif (Auth::user()->admin)
                                     <a class="dropdown-item"  href="/bannedPost/{{ $post->id }}">
-                                        <i class="fa fa-sun btn btn-danger"></i>Заблокировать пост</a>
+                                        <i class="fa fa-lock btn btn-danger"></i>Заблокировать пост</a>
                                 @endif     
                             <!-- show post -->    
                             @if (Auth::user()->admin && $post->banned==1)
@@ -233,8 +230,65 @@
                 </div>
             </div>
        </div>
+       
+  @endsection 
+  
+  
+@section('comments')
+<!-- навигационная строка раздела комментариев -->
+<nav class="col-lg-12 col-xl-12 m-auto navbar navbar-expand-lg navbar-dark bg-danger bg-primary-gradient sticky-top mt-5">
+    <a class="navbar-brand d-flex align-items-center fw-500" href="users.html"><img alt="logo" class="d-inline-block align-top mr-2 sizeImageNav" src="/lesson-project-php-mvc/public/img/paper-airplane-5.png" >comments</a> <button aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarColor02" data-toggle="collapse" type="button"><span class="navbar-toggler-icon"></span></button>
+    <div class="collapse navbar-collapse" id="navbarColor02">
+        <ul class="navbar-nav md-3">
+            <li class="nav-item active">
+                <a class="nav-link" href="/">All <span class="sr-only">(current)</span></a>
+            </li>
+        </ul>
+        <?php if(auth()->user()->id == $post->user_id):?>
+        <ul class="navbar-nav md-3">
+            <li class="nav-item active">
+                <a class="nav-link text-info" href="/posts" >Все комментарии <span class="sr-only">(current)</span></a>
+            </li>
+        </ul>
+        <?php else:?>
+        <ul class="navbar-nav md-3">
+            <li class="nav-item active">
+                <a class="nav-link" href="/posts">Все комментарии <span class="sr-only">(current)</span></a>
+            </li>
+        </ul>
+        <?php endif;?>
+        <?php if (auth()->user()->id == $post->user_id):?>
+        <ul class="navbar-nav md-3">
+            <li class="nav-item active">
+                <a class="nav-link text-info" href="/myPosts/" >Мои комментарии <span class="sr-only">(current)</span></a>
+            </li>
+        </ul>    
+        <?php else:?>
+        <ul class="navbar-nav md-3">
+            <li class="nav-item active">
+                <a class="nav-link" href="/myPosts/">Мои комментарии <span class="sr-only">(current)</span></a>
+            </li>
+        </ul>
+        <?php endif;?>
+        <ul class="navbar-nav ml-auto">
+            <?php if(auth()->user()->id == $post->user_id):?>
+            <li class="nav-item">
+                <a class="nav-link" href="/logout">Old comments</a>
+            </li>
+            <?php else:?>
+            <li class="nav-item">
+                <a class="nav-link" href="/login">New comments</a>
+            </li>
+            <?php endif;?>
+        </ul>
+    </div>
+</nav> 
+
+<div class="col-lg-12 col-xl-12 m-auto sticky-top bg-white">
+    
+        <div class="card mb-g rounded-top backgroundcolorCardPosts mt-3">
        <!-- форма ввода коментария -->
-       <form action="/addNewComment/{{ $post->id }}" method="POST" enctype="multipart/form-data" class="col-lg-10 col-xl-10 m-auto">
+       <form action="/addNewComment/{{ $post->id }}" method="POST" enctype="multipart/form-data" class="col-lg-12 col-xl-12 m-auto">
         {{ csrf_field() }}
         <div class="col-lg-12 col-xl-12 m-auto">
                 <!-- текст коментария -->
@@ -244,137 +298,125 @@
                         <input type="text" id="simpleinput" class="form-control" name="user_id" value="{{ Auth::id()}}"  hidden>
                     </div>                                     
         </div>       
-         <div class="col-md-12 mt-3 d-flex flex-row-reverse">
-          <button class="btn btn-info" type="submit" name="submit">Отправить комментарий</button>
+         <div class="col-md-12 mt-3 mb-3 d-flex flex-row-reverse">
+          <button class="btn btn-danger" type="submit" name="submit">Отправить комментарий</button>
         </div>
-      </form>   
+      </form> 
     </div>
-    <br>
-    <br>
-    
-      <script src="{{ asset('js/vendors.bundle.js') }}"></script>
-      <script src="{{ asset('js/app.bundle.js') }}"></script>
-      <script>
-  
-          $(document).ready(function()
-          {
-  
-          });
-  
-      </script>      
-  @endsection      
-</main>
+ </div>
 
-@section('comments')
-
-
-<!-- навигационная строка раздела комментариев -->
-<nav id="navbar-example2" class="navbar navbar-light bg-info px-3 m-auto col-lg-10 col-xl-10 rounded">
-    <a class="navbar-brand" href="#">Комментарии</a>
-    <ul class="nav nav-pills">
-      <li class="nav-item">
-        <a class="nav-link text-white" href="#scrollspyHeading1">Сначала новые</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link text-white"" href="#scrollspyHeading2">Сначала старые</a>
-      </li>
-    </ul>
-  </nav>
 
   <!-- comments -->
+<div class="col-lg-12 col-xl-12 m-auto">
+  <div class="card mb-g rounded-top backgroundcolorCardCommentTop">   
   <div  class=" col-lg-10 col-xl-10 m-auto" >
     @foreach ($post->comments as $comment)
     <!-- комментарии авторизованного пользователя -->
     @if (Auth::id() == $comment->user_id )
-    <div class="col-lg-10 col-xl-10 mt-2 ml-auto" >
-        <div class="toast-header bg-info md-3 rounded-top">
-        <span class="rounded-circle profile-image d-block md-3" style="background-image:url('{{ asset($comment->user->info->avatar) }}'); background-size: cover;"> </span>
-        <strong class="md-3">{{ $comment->user->name }}</strong>
-        <small class="ml-auto"> {{ $comment->updated_at }} </small>
-        <!-- заблокированные коментарии -->
-        @if (Auth::user()->admin && $comment->banned==1)
-            <a class="bt btn-warning ml-auto"  href="/unBannedComment/{{ $comment->id }}/{{ $post->id }}">
-                <i class="fa fa-sun btn btn-warning"> </i>Разблокировать комментарий</a>   
-        @elseif (Auth::user()->admin)
-            <a class="bt text-danger ml-auto"  href="/bannedComment/{{ $comment->id }}/{{ $post->id }}">
-                <i class="fa fa-sun btn btn-danger"> </i>Заблокировать комментарий</a>
-        @endif     
-        <a class=" btn-close ml-auto text-white" onclick="return confirm('are your sure?')" aria-label="Close"  href="/deleteComment/{{ $comment->id }}/{{ $post->id }}"> Удалить комментарий</a>
+    <div class="row mb-0" id="js-contacts">
+        <div class="col-xl-4">
+            <div  class="card border shadow-0 mb-g shadow-sm-hover mt-3 backgroundcolorCardCommentsAny"  >
+                <div class="card-body border-faded border-top-0 border-left-0 border-right-0 rounded-top">
+                    <div class="d-flex flex-row align-items-center">
+                        <span class="status status-success mr-3">
+                            <span class="rounded-circle profile-image d-block " style="background-image:url('{{ asset($comment->user->info->avatar) }}'); background-size: cover;"></span>
+                        </span>
+                        <div class="info-card-text flex-1">
+                            <a href="javascript:void(0);" class="fs-xl text-truncate text-truncate-lg text-info" data-toggle="dropdown" aria-expanded="false">
+                                {{ $comment->user->name }}
+                                <i class="fal fas fa-cog fa-fw d-inline-block ml-1 fs-md"></i>
+                                <i class="fal fa-angle-down d-inline-block ml-1 fs-md"></i>
+                            </a>
+                            <div class="dropdown-menu">
+                                @if (Auth::user()->admin && $comment->banned==1)
+                                <a class="dropdown-item text-warning"  href="/unBannedComment/{{ $comment->id }}/{{ $post->id }}">
+                                    <i class="fa fa-unlock "> </i> Разблокировать</a>   
+                                    @elseif (Auth::user()->admin)
+                                <a class="dropdown-item text-danger"  href="/bannedComment/{{ $comment->id }}/{{ $post->id }}">
+                                    <i class="fa fa-lock"> </i> Заблокировать</a>
+                                    @endif 
+                                <a class="dropdown-item" onclick="return confirm('are your sure?')" aria-label="Close"  href="/deleteComment/{{ $comment->id }}/{{ $post->id }}">
+                                    <i class="fa fa-window-close"></i> Удалить комментарий</a> 
+                            
+                            </div>
+                            <span class="text-truncate text-truncate-xl">{{ $comment->updated_at }}</span>
+                            <span class="text-truncate text-truncate-xl">{{ $comment->user->name }}</span>
+                        </div>
+                        <button class="js-expand-btn btn btn-sm btn-default d-none" data-toggle="collapse" data-target="#c_1 > .card-body + .card-body" aria-expanded="false">
+                            <span class="collapsed-hidden">+</span>
+                            <span class="collapsed-reveal">-</span>
+                        </button>
+                    </div>    
+                </div>
+                @if (Auth::user()->admin && $comment->banned==1)
+                    <h6  class="bg-danger bg-danger-gradient pt-3 pb-3 pl-3 text-white rounded-bottom mt-0"> Комментарий заблокирован из-за нарушения правил пользования веб сайтом : {{ $comment->comment }}</h6>    
+                    @elseif ($comment->banned==1)
+                    <h6  class="bg-secondary bg-secondary-gradient pt-3 pb-3 pl-3 text-white rounded-bottom mt-0">Комментарий заблокирован из-за нарушения правил пользования веб сайтом </h6>
+                    @else
+                    <h6  class=" pt-3 pb-3 pl-3  rounded-bottom mt-0 backgroundcolorCardCommentBottom">{{ $comment->comment }}</h6>
+                @endif
+            </div>
         </div>
-        @if ( Auth::user()->admin && $comment->banned==1)
-        <h6 id="scrollspyHeading1 btn-danger" class="bg-danger bg-danger-gradient pt-4 pb-4 pl-4 text-white rounded-bottom"> Комментарий заблокирован из-за нарушения правил пользования веб сайтом : {{ $comment->comment }}</h6>    
-        @elseif ($comment->banned==1)
-        <h6 id="scrollspyHeading1" class="bg-secondary bg-secondary-gradient pt-4 pb-4 pl-4 text-white rounded-bottom">Комментарий заблокирован из-за нарушения правил пользования веб сайтом </h6>
-        @else
-        <h6 id="scrollspyHeading1" class="bg-warning bg-waning-gradient pt-4 pb-4 pl-4 rounded-bottom">{{ $comment->comment }}</h6>
-        @endif
-    </div> 
+    </div>
 
     <!-- коментарии других пользователей -->
     @else
-    <div class="col-lg-10 col-xl-10 mt-2"  >
-        <div class="toast-header bg-info rounded-top">
-        <span class="rounded-circle profile-image d-block " style="background-image:url('{{ asset($comment->user->info->avatar) }}'); background-size: cover;"></span>
-        <strong class="md-3">{{ $comment->user->name }}</strong>
-        <small class="ml-auto">{{ $comment->updated_at}}</small>
-        <!-- заблокированные коментарии -->
-        @if (Auth::user()->admin && $comment->banned==1)
-            <a class="bt btn-warning ml-auto"  href="/unBannedComment/{{ $comment->id }}/{{ $post->id }}">
-                <i class="fa fa-sun btn btn-warning"></i>Разблокировать комментарий</a>   
-        @elseif (Auth::user()->admin && $comment->banned==0)
-            <a class="text-danger ml-auto"  href="/bannedComment/{{ $comment->id }}/{{ $post->id }}">
-                <i class="fa fa-sun btn btn-danger"></i>Заблокировать комментарий</a>
-        @endif 
-        <a class=" btn-close ml-auto text-white" onclick="return confirm('are your sure?')" aria-label="Close"  href="/deleteComment/{{ $comment->id }}/{{ $post->id }}">Удалить комментарий</a>    
+    <div class="row mb-0" id="js-contacts">
+        <div class="col-xl-4">
+            <div  class="card border shadow-0 mb-g shadow-sm-hover mt-3 "  >
+                <div class="card-body border-faded border-top-0 border-left-0 border-right-0 rounded-top">
+                    <div class="d-flex flex-row align-items-center">
+                        <span class="status status-success mr-3">
+                            <span class="rounded-circle profile-image d-block " style="background-image:url('{{ asset($comment->user->info->avatar) }}'); background-size: cover;"></span>
+                        </span>
+                        <div class="info-card-text flex-1">
+                            <a href="javascript:void(0);" class="fs-xl text-truncate text-truncate-lg text-info" data-toggle="dropdown" aria-expanded="false">
+                                {{ $comment->user->name }}
+                                <i class="fal fas fa-cog fa-fw d-inline-block ml-1 fs-md"></i>
+                                <i class="fal fa-angle-down d-inline-block ml-1 fs-md"></i>
+                            </a>
+                            <div class="dropdown-menu">
+                                @if (Auth::user()->admin && $comment->banned==1)
+                                <a class="dropdown-item text-warning"  href="/unBannedComment/{{ $comment->id }}/{{ $post->id }}">
+                                    <i class="fa fa-unlock "> </i> Разблокировать</a>   
+                                @elseif (Auth::user()->admin)
+                                <a class="dropdown-item text-danger"  href="/bannedComment/{{ $comment->id }}/{{ $post->id }}">
+                                    <i class="fa fa-lock"> </i> Заблокировать</a>
+                                @endif 
+                                <a class="dropdown-item" onclick="return confirm('are your sure?')" aria-label="Close"  href="/deleteComment/{{ $comment->id }}/{{ $post->id }}">
+                                    <i class="fa fa-window-close"></i> Удалить комментарий</a> 
+                            
+                            </div>
+                            <span class="text-truncate text-truncate-xl">{{ $comment->updated_at }}</span>
+                            <span class="text-truncate text-truncate-xl">{{ $comment->user->name }}</span>
+                        </div>
+                        <button class="js-expand-btn btn btn-sm btn-default d-none" data-toggle="collapse" data-target="#c_1 > .card-body + .card-body" aria-expanded="false">
+                            <span class="collapsed-hidden">+</span>
+                            <span class="collapsed-reveal">-</span>
+                        </button>
+                    </div>    
+                </div>
+                @if (Auth::user()->admin && $comment->banned==1)
+                    <h6  class="bg-danger bg-danger-gradient pt-3 pb-3 pl-3 text-white rounded-bottom mt-0"> Комментарий заблокирован из-за нарушения правил пользования веб сайтом : {{ $comment->comment }}</h6>    
+                    @elseif ($comment->banned==1)
+                    <h6  class="bg-secondary bg-secondary-gradient pt-3 pb-3 pl-3 text-white rounded-bottom mt-0">Комментарий заблокирован из-за нарушения правил пользования веб сайтом </h6>
+                    @else
+                    <h6  class=" pt-3 pb-3 pl-3  rounded-bottom mt-0 backgroundcolorCardCommentBottom">{{ $comment->comment }}</h6>
+                @endif
+            </div>
         </div>
-    @if (Auth::user()->admin && $comment->banned==1)
-    <h6 id="scrollspyHeading1 btn-danger" class="bg-danger bg-danger-gradient pt-4 pb-4 pl-4 text-white rounded-bottom" > Комментарий заблокирован из-за нарушения правил пользования веб сайтом :  {{ $comment->comment }}</h6>    
-    @elseif ($comment->banned==1)
-    <h6 id="scrollspyHeading1 btn-danger" class="bg-secondary bg-secondary-gradient pt-4 pb-4 pl-4 text-white rounded-bottom" > Комментарий заблокирован из-за нарушения правил пользования веб сайтом</h6>
-    @else
-    <h6 id="scrollspyHeading1" class=" bg-info-gradient pt-4 pb-4 pl-4 rounded-bottom" >{{ $comment->comment }}</h6>
+    </div>
     @endif
-    </div> 
-   @endif 
    @endforeach
   </div>
-  
-  
+  </div>
+</div> 
 @endsection
 
 @section('script')
 
 <script src="{{ asset('js/vendors.bundle.js') }}"></script>
     <script src="{{ asset('js/app.bundle.js') }}"></script>
-    <script>
 
-        $(document).ready(function()
-        {
-
-            $('input[type=radio][name=contactview]').change(function()
-                {
-                    if (this.value == 'grid')
-                    {
-                        $('#js-contacts .card').removeClassPrefix('mb-').addClass('mb-g');
-                        $('#js-contacts .col-xl-12').removeClassPrefix('col-xl-').addClass('col-xl-4');
-                        $('#js-contacts .js-expand-btn').addClass('d-none');
-                        $('#js-contacts .card-body + .card-body').addClass('show');
-
-                    }
-                    else if (this.value == 'table')
-                    {
-                        $('#js-contacts .card').removeClassPrefix('mb-').addClass('mb-1');
-                        $('#js-contacts .col-xl-4').removeClassPrefix('col-xl-').addClass('col-xl-12');
-                        $('#js-contacts .js-expand-btn').removeClass('d-none');
-                        $('#js-contacts .card-body + .card-body').removeClass('show');
-                    }
-
-                });
-
-                //initialize filter
-                initApp.listFilter($('#js-contacts'), $('#js-filter-contacts'));
-        });
-
-    </script>    
 @endsection
         

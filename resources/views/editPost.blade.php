@@ -16,14 +16,15 @@
     <link id="myskin" rel="stylesheet" media="screen, print" href="{{ asset('css/skins/skin-master.css') }}">
     <link rel="stylesheet" media="screen, print" href="{{ asset('css/fa-solid.css') }}">
     <link rel="stylesheet" media="screen, print" href="{{ asset('css/fa-brands.css') }}">
-    <link rel="stylesheet" media="screen, print" href="{{ asset('css/fa-regular.css') }}">   
+    <link rel="stylesheet" media="screen, print" href="{{ asset('css/fa-regular.css') }}"> 
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/style.css') }}">    
 @endsection
 
 
 
 @section('navchat')
-<nav class="navbar navbar-expand-lg navbar-dark bg-info bg-info-gradient">
-    <a class="navbar-brand d-flex align-items-center fw-500" href="users.html"><img alt="logo" class="d-inline-block align-top mr-2" src="{{ asset('img/logo.png') }}">Страница постов</a> <button aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarColor02" data-toggle="collapse" type="button"><span class="navbar-toggler-icon"></span></button>
+<nav class="navbar navbar-expand-lg navbar-dark bg-danger bg-primary-gradient fixed-top">
+    <a class="navbar-brand d-flex align-items-center fw-500" href="users.html"><img alt="logo" class="d-inline-block align-top mr-2" src="/laravel-training-project/public/img/message.png" style="width: 35px;"> Book of friends</a> <button aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarColor02" data-toggle="collapse" type="button"><span class="navbar-toggler-icon"></span></button>
     <div class="collapse navbar-collapse" id="navbarColor02">
         <ul class="navbar-nav md-3">
             <li class="nav-item active">
@@ -200,7 +201,7 @@
                     </div>    
                 </div>
                 <div class="col-lg-11 col-xl-11 ml-auto mr-5 mb-4 d-flex flex-row-reverse ">
-                <button class="btn btn-info" type="submit" onclick="return confirm('are your sure?')" name="submit">Сохранить изменения</button>
+                <button class="btn btn-danger" type="submit" onclick="return confirm('are your sure?')" name="submit">Сохранить изменения</button>
                 </div>    
             </div>  
         </div>
@@ -227,28 +228,6 @@
         $(document).ready(function()
         {
 
-            $('input[type=radio][name=contactview]').change(function()
-                {
-                    if (this.value == 'grid')
-                    {
-                        $('#js-contacts .card').removeClassPrefix('mb-').addClass('mb-g');
-                        $('#js-contacts .col-xl-12').removeClassPrefix('col-xl-').addClass('col-xl-4');
-                        $('#js-contacts .js-expand-btn').addClass('d-none');
-                        $('#js-contacts .card-body + .card-body').addClass('show');
-
-                    }
-                    else if (this.value == 'table')
-                    {
-                        $('#js-contacts .card').removeClassPrefix('mb-').addClass('mb-1');
-                        $('#js-contacts .col-xl-4').removeClassPrefix('col-xl-').addClass('col-xl-12');
-                        $('#js-contacts .js-expand-btn').removeClass('d-none');
-                        $('#js-contacts .card-body + .card-body').removeClass('show');
-                    }
-
-                });
-
-                //initialize filter
-                initApp.listFilter($('#js-contacts'), $('#js-filter-contacts'));
         });
 
     </script>

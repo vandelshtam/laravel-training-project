@@ -105,9 +105,14 @@ class UsersController extends BaseController
             $id = DB::table('users')->insertGetId([
                 'name' => $this->request->name,
                 'email' => $this->request->email,
-                'password' => Hash::make($this->request->password)
+                'password' => Hash::make($this->request->password),
+                'search' => strtolower($_POST['name'])
             ]);
             
+            
+            User::where('id', $id)
+              ->update(['c' => 'c_'.$id]);
+
 
             $info = Info::create([
                 'occupation' => $this->request->occupation,

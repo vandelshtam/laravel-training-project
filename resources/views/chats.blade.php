@@ -23,7 +23,7 @@
 
 @section('navchat')
 <nav class="navbar navbar-expand-lg navbar-dark bg-info bg-info-gradient">
-    <a class="navbar-brand d-flex align-items-center fw-500" href="users.html"><img alt="logo" class="d-inline-block align-top mr-2" src="img/logo.png">Страница чатов</a> <button aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarColor02" data-toggle="collapse" type="button"><span class="navbar-toggler-icon"></span></button>
+    <a class="navbar-brand d-flex align-items-center fw-500" href="users.html"><img alt="logo" class="d-inline-block align-top mr-2" src="img/message.png">Страница чатов</a> <button aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarColor02" data-toggle="collapse" type="button"><span class="navbar-toggler-icon"></span></button>
     <div class="collapse navbar-collapse" id="navbarColor02">
         <ul class="navbar-nav md-3">
             <li class="nav-item active">
@@ -229,15 +229,8 @@
                                     </div>
                                     @endif
                                     <span class="text-truncate text-truncate-xl">{{ $chat->location }}</span>
-                                </div>
-                                    <span class="text-truncate text-truncate-xl">Автор чата - {{ App\Models\User::find($chat->author_user_id)->name }} </span>
-                                    
-                                @if ($chat->banned==1)
-                                    <span class="text-truncate text-truncate-xl ml-3 bt btn-danger">Чат заблокирован</span>
-                                    
-                                @else
-                                    <span class="text-truncate text-truncate-xl ml-3 bt btn-success">Активный чат</span>
-                                @endif
+                                    <span class="text-truncate text-truncate-xl">Автор чата -  App\Models\User::find($chat->author_user_id)->name  </span>
+                                </div>        
                                 <button class="js-expand-btn btn btn-sm btn-default d-none" data-toggle="collapse" data-target="#c_1 > .card-body + .card-body" aria-expanded="false">
                                     <span class="collapsed-hidden">+</span>
                                     <span class="collapsed-reveal">-</span>
