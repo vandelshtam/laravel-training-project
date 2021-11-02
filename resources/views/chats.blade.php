@@ -16,14 +16,15 @@
     <link id="myskin" rel="stylesheet" media="screen, print" href="css/skins/skin-master.css">
     <link rel="stylesheet" media="screen, print" href="css/fa-solid.css">
     <link rel="stylesheet" media="screen, print" href="css/fa-brands.css">
-    <link rel="stylesheet" media="screen, print" href="css/fa-regular.css">   
+    <link rel="stylesheet" media="screen, print" href="css/fa-regular.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/style.css') }}">    
 @endsection
 
 
 
 @section('navchat')
-<nav class="navbar navbar-expand-lg navbar-dark bg-info bg-info-gradient">
-    <a class="navbar-brand d-flex align-items-center fw-500" href="users.html"><img alt="logo" class="d-inline-block align-top mr-2" src="img/message.png">Страница чатов</a> <button aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarColor02" data-toggle="collapse" type="button"><span class="navbar-toggler-icon"></span></button>
+<nav class="navbar navbar-expand-lg navbar-dark bg-danger bg-primary-gradient fixed-top">
+    <a class="navbar-brand d-flex align-items-center fw-500" href="users.html"><img alt="logo" class="d-inline-block align-top mr-2" src="img/message.png" style="width: 35px;">Страница чатов</a> <button aria-controls="navbarColor02" aria-expanded="false" aria-label="Toggle navigation" class="navbar-toggler" data-target="#navbarColor02" data-toggle="collapse" type="button"><span class="navbar-toggler-icon"></span></button>
     <div class="collapse navbar-collapse" id="navbarColor02">
         <ul class="navbar-nav md-3">
             <li class="nav-item active">
@@ -33,7 +34,7 @@
         @if($navigate['chatsAll']==1)
         <ul class="navbar-nav md-3">
             <li class="nav-item active">
-                <a class="nav-link text-danger" href="/chats" >Все чаты <span class="sr-only">(current)</span></a>
+                <a class="nav-link text-info" href="/chats" >Все чаты <span class="sr-only">(current)</span></a>
             </li>
         </ul>
         @else
@@ -46,7 +47,7 @@
         @if ($navigate['myChats']==1)
         <ul class="navbar-nav md-3">
             <li class="nav-item active">
-                <a class="nav-link text-danger" href="/chatsMy" >Мои чаты <span class="sr-only">(current)</span></a>
+                <a class="nav-link text-info" href="/chatsMy" >Мои чаты <span class="sr-only">(current)</span></a>
             </li>
         </ul>    
         @else
@@ -59,7 +60,7 @@
         @if ($navigate['favorites']==1)
         <ul class="navbar-nav md-3">
             <li class="nav-item active">
-                <a class="nav-link text-danger" href="/chatsFavorites" >Избранные чаты <span class="sr-only">(current)</span></a>
+                <a class="nav-link text-info" href="/chatsFavorites" >Избранные чаты <span class="sr-only">(current)</span></a>
             </li>
         </ul> 
         @else
@@ -68,13 +69,6 @@
                 <a class="nav-link" href="/chatsFavorites">Избранные чаты<span class="sr-only">(current)</span></a>
             </li>
         </ul>   
-        @endif
-        @if ($navigate['searchChats']==1)
-        <ul class="navbar-nav md-3">
-            <li class="nav-item active">
-                <a class="nav-link text-danger" href="#" >Вы в режиме поиска <span class="sr-only">(current)</span></a>
-            </li>
-        </ul> 
         @endif
         <ul class="navbar-nav md-3">
             <li class="nav-item active">
@@ -111,47 +105,43 @@
 @endsection
 
 @section('content')
-<main id="js-page-content" role="main" class="page-content mt-3">
+<main id="js-page-content" role="main" class="page-content mt-6">
 
             <!-- флеш сообщения - начало блока -->
             @if ($flash_message_success)
-            <div class="alert alert-success">
+            <div class="alert alert-success mt-6">
                 {{ $flash_message_success }}   
             </div>    
             @endif
             @if ($flash_message_danger)
-            <div class="alert alert-danger">
+            <div class="alert alert-danger mt-6">
                 {{ $flash_message_danger }}   
             </div>    
             @endif
             <!-- флеш сообщения - окончание блока -->
 
-            <div class="subheader">
+            <div class="subheader mt-6">
                 <h1 class="subheader-title">
                     <i class='subheader-icon fal fa-users'></i> Список чатов
                 </h1>
             </div>
-            <div class="row">
+            <div class="row sticky-top bg-white mt-5">
                 <!--  блоки: добавить чат и поиск чатов -->
                 <div class="col-xl-12">
                     @if (App\Models\Userlist::where('user_id', auth()->user()->id)==true || Auth::user()->admin)
-                    <a class="btn btn-info" href="/addChatShow">Добавить чат</a>
+                    <a class="btn btn-danger" href="/addChatShow">Добавить чат</a>
                 @endif
-                <form action="/searchChats" method="GET">
-                    {{ csrf_field() }}
-                    <div class="border-faded bg-faded p-3 mb-g d-flex mt-3">
-                        <input type="text" id="js-filter-contacts" name="filter_contacts" class="form-control shadow-inset-2 form-control-lg" placeholder="Найти чат">
-                        <div class="btn-group btn-group-lg btn-group-toggle hidden-lg-down ml-3" data-toggle="buttons">
-                            <label class="btn btn-default active">
-                                <input type="radio" name="contactview" id="grid" checked="" value="{{ old('filter_contacts') }}"><i class="fas fa-table"></i>
-                            </label>
-                            <label class="btn btn-default">
-                                <input type="radio" name="contactview" id="table" value="table"><i class="fas fa-th-list"></i>
-                            </label>
-                        </div>
-                        <button class="btn btn-warning" type="submit" name="submit">Поиск</button>
+                <div class="border-faded bg-faded p-3 mb-g d-flex mt-3">
+                    <input type="text" id="js-filter-contacts" name="filter-contacts" class="form-control shadow-inset-2 form-control-lg" placeholder="Найти чат">
+                    <div class="btn-group btn-group-lg btn-group-toggle hidden-lg-down ml-3" data-toggle="buttons">
+                        <label class="btn btn-default active">
+                            <input type="radio" name="contactview" id="grid" checked="" value="grid"><i class="fas fa-table"></i>
+                        </label>
+                        <label class="btn btn-default">
+                            <input type="radio" name="contactview" id="table" value="table"><i class="fas fa-th-list"></i>
+                        </label>    
                     </div>
-                </form>    
+                </div>    
                 </div>
             </div>
 
@@ -161,7 +151,7 @@
                 @foreach ($chats as $chat)
                 
                 <div class="col-xl-4">
-                    <div id="c_1" class="card border shadow-0 mb-g shadow-sm-hover" data-filter-tags="">
+                    <div id="{{ $chat->c }}" class="card border shadow-0 mb-g shadow-sm-hover" data-filter-tags="{{ $chat->search_chat }}">
                         <div class="card-body border-faded border-top-0 border-left-0 border-right-0 rounded-top">
                             <div class="d-flex flex-row align-items-center">
                                 <!-- статус чата -->
@@ -178,16 +168,19 @@
                                         {{ $chat->name }}
                                         <i class="fal fas fa-cog fa-fw d-inline-block ml-1 fs-md"></i>
                                         <i class="fal fa-angle-down d-inline-block ml-1 fs-md"></i>
+                                        @if ($chat -> favorites == 1)
+                                        <span class="star ml-3"></span>
+                                        @endif
                                     </a>
 
                                     <!--выпадающее подменю-->
                                     @if (auth()->user()->admin  || (Auth::check() && $chat->banned !=1))
-                                    <div class="dropdown-menu">
+                                    <div class="dropdown-menu bg-danger-gradient">
                                         <a class="dropdown-item" href="/openChat/{{ $chat->id }}">
                                             <i class="fa fa-edit"></i>
                                         Открыть чат</a> 
                                         @if ($chat->favorites==1)
-                                        <a class="dropdown-item btn-warning" href="/offFavorites/{{ $chat->id }}">
+                                        <a class="dropdown-item" href="/offFavorites/{{ $chat->id }}">
                                             <i class="fa fa-lock"></i>
                                         Удалить из  избранного</a>    
                                         @else
@@ -206,11 +199,11 @@
                                         @endif
                                         @if (Auth()->user()->admin)
                                             @if ($chat->banned == 1)
-                                            <a class="dropdown-item btn-warning" href="/offBannedChat/{{ $chat->id }}">
+                                            <a class="dropdown-item" href="/offBannedChat/{{ $chat->id }}">
                                                 <i class="fa fa-lock"></i>
                                             Разблокировать чат</a>
                                             @else
-                                            <a class="dropdown-item btn-warning" href="/onBannedChat/{{ $chat->id }}">
+                                            <a class="dropdown-item" href="/onBannedChat/{{ $chat->id }}">
                                                 <i class="fa fa-lock"></i>
                                             Заблокировать чат</a>      
                                             @endif   
@@ -229,7 +222,7 @@
                                     </div>
                                     @endif
                                     <span class="text-truncate text-truncate-xl">{{ $chat->location }}</span>
-                                    <span class="text-truncate text-truncate-xl">Автор чата -  App\Models\User::find($chat->author_user_id)->name  </span>
+                                    <span class="text-truncate text-truncate-xl">{{ $chat->created_at }}</span>
                                 </div>        
                                 <button class="js-expand-btn btn btn-sm btn-default d-none" data-toggle="collapse" data-target="#c_1 > .card-body + .card-body" aria-expanded="false">
                                     <span class="collapsed-hidden">+</span>

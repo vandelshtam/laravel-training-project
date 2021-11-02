@@ -25,6 +25,8 @@ class Chat extends Model
         'chat_id',
         'role',
         'user_id',
+        'c',
+        'search_chat'
     ];
 
     public function messages()

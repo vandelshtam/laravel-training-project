@@ -129,9 +129,12 @@ class PostsController extends Controller
             'postable_id' => $user_id,
             'info_id' => $user->info->id,
             'social_id' => $user->social->id,
+            'c' => 0,
+            'search_post' => strtolower($this->request->name_post)
         ]);
         $post = Post::find($new_post->id);
         $post->post_id = $new_post->id;
+        Post::where('id', $post->id)->update(['c' => 'c_'.$post->id]);
         $post->save();    
 
         //запись картинки в таблицу картинок в БД
@@ -203,12 +206,13 @@ class PostsController extends Controller
                     'text'  => 'required|min:6|max:300',
                 ]);
            
-                Post::create([
-                'name_post' => $this->request->name_post,
-                'title_post' => $this->request->title_post,
-                'text' => $this->request->text 
-                ]);
-    
+                Post::where('id', $post_id)->update(
+                    [
+                        'name_post' => $this->request->name_post,
+                        'title_post' => $this->request->title_post,
+                        'text' => $this->request->text,
+                        'search_post' => strtolower($this->request->name_post) 
+                    ]);
                 return redirect('/post/'.$post_id.'');
             
         }

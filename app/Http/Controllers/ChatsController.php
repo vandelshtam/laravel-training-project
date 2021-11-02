@@ -70,6 +70,10 @@ class ChatsController extends Controller
 
 
 
+
+
+
+
     //вывод на страницу чатов со статусом избранные 
     public function chatsFavorites(){
         
@@ -113,6 +117,10 @@ class ChatsController extends Controller
 
 
 
+
+
+
+
     //вывод на страницу  чатов, которые создал автор (админ)
     public function chatsMy(){
         
@@ -135,27 +143,11 @@ class ChatsController extends Controller
          'navigate' => $navigate, ]);
     }
 
-    //поиск чатов 
-    public function searchChats(){
-        $flash_message_success = session('flash_message_success');
-        $flash_message_danger = session('flash_message_danger');
-        
-        $key = trim($this->request->get('filter_contacts'));
-        $chats = Chat::where('name', 'like', "%{$key}%")->get();
-            
-        $navigate = [
-            'myChats' => 0,
-            'favorites' => 0,
-            'chatsAll' => 0,
-            'searchChats' => 1];
+    
 
-            return view('chats', 
-            [
-             'chats' => $chats,
-             'flash_message_success' => $flash_message_success,
-             'flash_message_danger' => $flash_message_danger,
-             'navigate' => $navigate,  ]);
-    }
+
+
+
 
     //страница вывода форма создания нового чата 
     public function addChatShow(){
@@ -179,6 +171,12 @@ class ChatsController extends Controller
              'navigate' => $navigate, 
              ]);
     }
+
+
+
+
+
+
 
     //добавление в БД нового чата
     public function addChat($author_user_id){
@@ -205,7 +203,12 @@ class ChatsController extends Controller
             'author_user_id' => $author_user_id,
             'user_id' => $author_user_id,
             'location' => User::find(auth()->user()->id)->info->location,
+            'c' => 0,
+            'search_chat' => strtolower($this->request->name_chat)
         ]);
+
+        Chat::where('id', $id_new_chat)->update(['c' => 'c_'.$id_new_chat]);
+
 
         //запись аватара в таблицу чатов  если он добавлен в форму
         if($this->request->file('avatar_chat')){
@@ -231,6 +234,12 @@ class ChatsController extends Controller
 
 
 
+
+
+
+
+
+
     //страница  чата
     public function openChat($chat_id){
         $flash_message_success = session('flash_message_success');
@@ -243,8 +252,8 @@ class ChatsController extends Controller
         }
         //проверка  прав действий, админ или автор сообщения
        if (!(auth()->user()->admin) && !(Userlist::where([
-                                                            ['user_id', '=', auth()->user()->id],
-                                                            ['chat_id', '=', $chat_id],
+                    ['user_id', '=', auth()->user()->id],
+                    ['chat_id', '=', $chat_id],
                                                           ])->get()==true))
         {
             $this->request->session()->flash('flash_message_danger','You do not have permission to edit user profile!');
@@ -252,7 +261,7 @@ class ChatsController extends Controller
         }
 
         $chat = Chat::find($chat_id); 
-
+        
         return view('openChat', 
         [
          'chat' => $chat,
@@ -260,6 +269,11 @@ class ChatsController extends Controller
          'flash_message_danger' => $flash_message_danger,
          ]);
     }
+
+
+
+
+
 
 
 
@@ -297,6 +311,10 @@ class ChatsController extends Controller
 
 
 
+
+
+
+
     public function delete_message($message_id, $user_id, $chat_id){
 
         //проверка наличия id и наличия сообщения с запрошенным id
@@ -316,6 +334,10 @@ class ChatsController extends Controller
         $this->request->session()->flash('flash_message_success','Вы успешно удалили сообщение!');
         return redirect('/openChat/'.$chat_id.'');
     }
+
+
+
+
 
 
 
@@ -358,6 +380,10 @@ class ChatsController extends Controller
 
 
 
+
+
+
+
     //редактирование чата
     public function editChat($chat_id){
 
@@ -390,7 +416,7 @@ class ChatsController extends Controller
             Chat::find($chat_id)->update([
             'name' => $this->request->name_chat,
             'name_chat' => $this->request->name_chat,
-            
+            'search_chat' => strtolower($this->request->name_chat)
         ]);
 
         //обновление аватара
@@ -415,6 +441,9 @@ class ChatsController extends Controller
     }
 
 
+
+
+
     public function deleteAvatarStorage($chat_id){
         
         $avatarChat=Chat::find($chat_id)->chat_avatar;
@@ -423,55 +452,7 @@ class ChatsController extends Controller
         }   
     }
 
-    public function listsIdUserInChat(){
-        //получение id всех пользователей
-        $arrey_users_id=[];
-        $users = User::get(); 
-        foreach($users as $user){
-             $arrey_users_id[]=$user->id;
-        }
 
-        // создание массива id  выбранных пользователей 
-        $arrey_user_new_chat=[];
-            foreach($arrey_users_id as $user_id){
-                 $rem = 'rememberme_'.$user_id;
-                 $user = 'user_'.$user_id;
-            if($this->request->$rem == 'on'){
-                $arrey_user_new_chat[]=($this->request->$user);
-            }
-        }
-        return $arrey_user_new_chat;
-    }
-
-
-
-    public function deleteUsersIsChat($user_id, $chat_id){
-        
-        //проверка наличия id и наличия данных с запрошенным id
-        if(!$chat_id || Chat::find($chat_id)!=true ){
-            $this->request->session()->flash('flash_message_danger','Такого сообщения нет!!!');
-            return redirect('/editChatShow/'.$chat_id.'');
-        }
-        //проверка  прав действий, админ или автор сообщения
-       if (!(auth()->user()->admin) && !(Chat::find($chat_id)->author_user_id == auth()->user()->id)){
-            $this->request->session()->flash('flash_message_danger','You do not have permission to edit user profile!');
-            return redirect('/editChatShow/'.$chat_id.'');
-        }
-
-        //защита от удаления всех участников чата
-        $listUserInChat = Userlist::where('chat_id', $chat_id)->get();
-        
-        if($listUserInChat->count() == 1){
-            $this->request->session()->flash('flash_message_danger','Вы не можете удалить всех участников чата, уменьшите список для удаления!');
-            return redirect('/editChatShow/'.$chat_id.'');
-        }
-        
-        Userlist::where('user_id',$user_id)->delete();
-        Message::where('user_id',$user_id)->delete();
-
-        $this->request->session()->flash('flash_message_success','Вы успешно удалили пользователя из чата!');
-        return redirect('/editChatShow/'.$chat_id.'');
-    }
 
 
 
@@ -498,6 +479,9 @@ class ChatsController extends Controller
     }
 
 
+
+
+
     public function onFavorites($chat_id){
         //проверка наличия id и наличия данных с запрошенным id
         if(!$chat_id || Chat::find($chat_id)!=true ){
@@ -521,6 +505,11 @@ class ChatsController extends Controller
     }
 
 
+
+
+
+
+
     public function offFavorites($chat_id){
         //проверка наличия id и наличия данных с запрошенным id
         if(!$chat_id || Chat::find($chat_id)!=true ){
@@ -541,6 +530,11 @@ class ChatsController extends Controller
         $this->request->session()->flash('flash_message_success','Вы успешно удалили чат из избранных!');
         return redirect('/chats');
     }
+
+
+
+
+
 
 
     public function onBannedChat($chat_id){
@@ -577,6 +571,11 @@ class ChatsController extends Controller
 
 
 
+
+
+
+
+
     public function roleModerator($user_id, $chat_id){
 
         //проверка наличия id и наличия данных с запрошенным id
@@ -601,6 +600,12 @@ class ChatsController extends Controller
     }
 
 
+
+
+
+
+
+
     public function roleParticipant($user_id, $chat_id){
         //проверка наличия id и наличия данных с запрошенным id
         if(!$user_id || Userlist::where('user_id',$user_id)->where('chat_id', $chat_id)->get()!=true  ){
@@ -620,6 +625,62 @@ class ChatsController extends Controller
         ]);
            
         $this->request->session()->flash('flash_message_success','Вы успешно изменили роль пользователя!');
+        return redirect('/editChatShow/'.$chat_id.'');
+    }
+
+
+
+
+
+    private function listsIdUserInChat(){
+        //получение id всех пользователей
+        $arrey_users_id=[];
+        $users = User::get(); 
+        foreach($users as $user){
+             $arrey_users_id[]=$user->id;
+        }
+
+        // создание массива id  выбранных пользователей 
+        $arrey_user_new_chat=[];
+            foreach($arrey_users_id as $user_id){
+                 $rem = 'rememberme_'.$user_id;
+                 $user = 'user_'.$user_id;
+            if($this->request->$rem == 'on'){
+                $arrey_user_new_chat[]=($this->request->$user);
+            }
+        }
+        return $arrey_user_new_chat;
+    }
+
+
+
+
+
+    private function deleteUsersIsChat($user_id, $chat_id){
+        
+        //проверка наличия id и наличия данных с запрошенным id
+        if(!$chat_id || Chat::find($chat_id)!=true ){
+            $this->request->session()->flash('flash_message_danger','Такого сообщения нет!!!');
+            return redirect('/editChatShow/'.$chat_id.'');
+        }
+        //проверка  прав действий, админ или автор сообщения
+       if (!(auth()->user()->admin) && !(Chat::find($chat_id)->author_user_id == auth()->user()->id)){
+            $this->request->session()->flash('flash_message_danger','You do not have permission to edit user profile!');
+            return redirect('/editChatShow/'.$chat_id.'');
+        }
+
+        //защита от удаления всех участников чата
+        $listUserInChat = Userlist::where('chat_id', $chat_id)->get();
+        
+        if($listUserInChat->count() == 1){
+            $this->request->session()->flash('flash_message_danger','Вы не можете удалить всех участников чата, уменьшите список для удаления!');
+            return redirect('/editChatShow/'.$chat_id.'');
+        }
+        
+        Userlist::where('user_id',$user_id)->delete();
+        Message::where('user_id',$user_id)->delete();
+
+        $this->request->session()->flash('flash_message_success','Вы успешно удалили пользователя из чата!');
         return redirect('/editChatShow/'.$chat_id.'');
     }
 

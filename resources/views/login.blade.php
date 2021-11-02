@@ -25,14 +25,15 @@
     <link rel="icon" type="image/png" sizes="32x32" href="img/favicon/favicon-32x32.png">
     <link rel="mask-icon" href="img/favicon/safari-pinned-tab.svg" color="#5bbad5">
     <link rel="stylesheet" media="screen, print" href="css/page-login-alt.css">
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/style.css') }}">  
     @endsection
 
     @section('content')
     <div class="blankpage-form-field">
-        <div class="page-logo m-0 w-100 align-items-center justify-content-center rounded border-bottom-left-radius-0 border-bottom-right-radius-0 px-4">
+        <div class="page-logo m-0 w-100 align-items-center justify-content-center rounded border-bottom-left-radius-0 border-bottom-right-radius-0 px-4 bg-danger bg-primary-gradient">
             <a href="javascript:void(0)" class="page-logo-link press-scale-down d-flex align-items-center">
-                <img src="img/logo.png" alt="SmartAdmin WebApp" aria-roledescription="logo">
-                <span class="page-logo-text mr-1">Учебный проект</span>
+                <img src="img/message.png" style="width: 35px;" alt="SmartAdmin WebApp" aria-roledescription="logo">
+                <span class="page-logo-text mr-1">Book of friends</span>
                 <i class="fal fa-angle-down d-inline-block ml-1 fs-lg color-primary-300"></i>
             </a>
         </div>
@@ -77,8 +78,8 @@
                 <button type="submit" name="submit" class="btn btn-default float-right">Войти</button>
             </form>
         </div>
-        <div class="blankpage-footer text-center">
-            Нет аккаунта? <a href="/register"><strong>Зарегистрироваться</strong>
+        <div class="blankpage-footer text-center text-danger">
+            Нет аккаунта? <a class="text-danger" href="/register"><strong>Зарегистрироваться</strong>
         </div>
     </div>
     @endsection

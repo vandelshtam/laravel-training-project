@@ -27,6 +27,8 @@ class Post extends Model
         'info_id',
         'social_id',
         'post_id',
+        'c',
+        'search_post'
     ];
 
     

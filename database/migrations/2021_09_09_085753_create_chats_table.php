@@ -27,6 +27,8 @@ class CreateChatsTable extends Migration
             $table->integer('chat_id')->nullable();
             $table->integer('banned')->nullable();
             $table->string('role', 'author');
+            $table->string('c');
+            $table->string('search_chat');
         });
     }
 
