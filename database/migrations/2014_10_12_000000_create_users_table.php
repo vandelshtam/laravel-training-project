@@ -24,6 +24,8 @@ class CreateUsersTable extends Migration
             $table->timestamps();
             $table->integer('info_id')->nullable();
             $table->integer('social_id')->nullable();
+            $table->string('c');
+            $table->string('search');
         });
     }
 

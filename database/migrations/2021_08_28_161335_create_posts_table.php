@@ -27,6 +27,8 @@ class CreatePostsTable extends Migration
             $table->integer('post_id')->nullable();
             $table->integer('info_id');
             $table->integer('social_id');
+            $table->string('c');
+            $table->string('search_post');
         });
     }
 
